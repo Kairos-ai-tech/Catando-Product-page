@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Catando — a cozy cat &amp; dog logic puzzle for iOS</title>
 <meta name="description" content="Catando is a calm, cozy logic puzzle for iOS: balance cats and dogs on a grid, follow the hints, never guess. Daily Puzzle, Stage Mode, Practice, and a progress dashboard with 10 badges. Free to play, no account needed.">
+<link rel="icon" href="images/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="images/favicon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -189,8 +191,9 @@
     display:flex;align-items:center;justify-content:center;
     box-shadow:var(--shadow-soft);
     flex-shrink:0;
+    overflow:hidden;
   }
-  .wordmark .mark svg{width:20px;height:20px;}
+  .wordmark .mark img{width:100%;height:100%;object-fit:cover;}
 
   /* ============ BUTTONS ============ */
   .btn{
@@ -569,7 +572,7 @@
 <header class="site">
   <div class="wrap nav-row">
     <a class="wordmark" href="#top">
-      <span class="mark"><svg viewBox="0 0 24 24" style="color:var(--ink)"><use href="#i-cat"/></svg></span>
+      <span class="mark"><img src="images/mark.jpg" alt="" width="34" height="34"></span>
       Catando
     </a>
     <a class="btn btn-primary btn-sm" href="#">Get the app</a>
@@ -913,7 +916,7 @@
   <div class="wrap">
     <div class="foot-row">
       <a class="wordmark" href="#top">
-        <span class="mark"><svg viewBox="0 0 24 24" style="color:var(--ink)"><use href="#i-dog"/></svg></span>
+        <span class="mark"><img src="images/mark.jpg" alt="" width="34" height="34"></span>
         Catando
       </a>
       <p class="foot-tag">No account needed. No timer. Just cats, dogs, and a little logic — whenever you want a quiet minute.</p>
