@@ -1,0 +1,930 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Catando — a cozy cat &amp; dog logic puzzle for iOS</title>
+<meta name="description" content="Catando is a calm, cozy logic puzzle for iOS: balance cats and dogs on a grid, follow the hints, never guess. Daily Puzzle, Stage Mode, Practice, and a progress dashboard with 10 badges. Free to play, no account needed.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    color-scheme:light;
+    /* surfaces — light (warm cream / cocoa), straight from Theme.swift */
+    --bg:#FFF8F0;
+    --card:#FFFFFF;
+    --board-frame:#F6EBDD;
+    --tile-empty:#F2ECE3;
+    --line:#E4D9CB;
+
+    /* ink */
+    --ink:#4A3F35;
+    --ink-soft:#8C7F72;
+
+    /* accents (appearance-fixed, per Theme.swift note re: white button text) */
+    --accent:#FF8FA3;
+    --accent-deep:#E86F86;
+    --accent-glow:#FF8FA3;
+    --accent-deep-glow:#E86F86;
+    --mint:#BFE8D4;
+    --mint-ink:#4FA57F;
+    --lilac:#DCD3F5;
+    --sun:#FFE3A3;
+    --danger:#F07070;
+
+    /* symbols */
+    --cat-tile:#FFD9B0;
+    --cat-ink:#E58A4B;
+    --dog-tile:#CFE6FF;
+    --dog-ink:#4E8FD8;
+
+    --radius:22px;
+    --shadow:0 14px 30px -12px rgba(74,63,53,0.18);
+    --shadow-soft:0 10px 22px -14px rgba(74,63,53,0.16);
+
+    --font-display:'Fredoka',ui-rounded,'SF Pro Rounded',system-ui,sans-serif;
+    --font-body:'Nunito',ui-rounded,'SF Pro Rounded',system-ui,sans-serif;
+
+    --measure:62ch;
+
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1B1512;
+      --card:#332B25;
+      --board-frame:#251D18;
+      --tile-empty:#3A3128;
+      --line:#463C33;
+      --ink:#F3EAE0;
+      --ink-soft:#A89B8D;
+      --accent-glow:#5A2E38;
+      --accent-deep-glow:#7A3F52;
+      --mint:#2F4A3E;
+      --mint-ink:#7ED3A7;
+      --lilac:#443C5E;
+      --sun:#63501F;
+      --danger:#F37676;
+      --cat-tile:#5E3A26;
+      --cat-ink:#FFAE6E;
+      --dog-tile:#284463;
+      --dog-ink:#8FC3FF;
+      --shadow:0 16px 34px -14px rgba(0,0,0,0.55);
+      --shadow-soft:0 12px 24px -16px rgba(0,0,0,0.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1B1512;
+    --card:#332B25;
+    --board-frame:#251D18;
+    --tile-empty:#3A3128;
+    --line:#463C33;
+    --ink:#F3EAE0;
+    --ink-soft:#A89B8D;
+    --accent-glow:#5A2E38;
+    --accent-deep-glow:#7A3F52;
+    --mint:#2F4A3E;
+    --mint-ink:#7ED3A7;
+    --lilac:#443C5E;
+    --sun:#63501F;
+    --danger:#F37676;
+    --cat-tile:#5E3A26;
+    --cat-ink:#FFAE6E;
+    --dog-tile:#284463;
+    --dog-ink:#8FC3FF;
+    --shadow:0 16px 34px -14px rgba(0,0,0,0.55);
+    --shadow-soft:0 12px 24px -16px rgba(0,0,0,0.5);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;}
+  [hidden]{display:none!important;}
+  h1,h2,h3{
+    font-family:var(--font-display);
+    font-weight:600;
+    line-height:1.08;
+    margin:0;
+    text-wrap:balance;
+    letter-spacing:-0.01em;
+  }
+  p{margin:0;line-height:1.6;}
+  .measure{max-width:var(--measure);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms!important;animation-iteration-count:1!important;transition-duration:0.001ms!important;}
+  }
+
+  /* ============ LAYOUT PRIMITIVES ============ */
+  .wrap{
+    width:100%;
+    max-width:1120px;
+    margin-inline:auto;
+    padding-inline:clamp(18px,4vw,40px);
+  }
+  section{padding-block:clamp(56px,9vw,108px);}
+  .eyebrow{
+    font-family:var(--font-body);
+    font-weight:800;
+    font-size:0.78rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--accent-deep);
+    display:flex;
+    align-items:center;
+    gap:0.5em;
+  }
+  .eyebrow::before{
+    content:"";
+    width:1.4em;height:2px;
+    background:var(--accent-deep);
+    border-radius:2px;
+    display:inline-block;
+  }
+
+  /* ============ HEADER ============ */
+  header.site{
+    position:sticky;
+    top:env(safe-area-inset-top,0px);
+    z-index:20;
+    backdrop-filter:blur(14px) saturate(1.3);
+    -webkit-backdrop-filter:blur(14px) saturate(1.3);
+    background:color-mix(in srgb, var(--bg) 78%, transparent);
+    border-bottom:1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  }
+  .nav-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    padding-block:14px;
+  }
+  .wordmark{
+    display:flex;
+    align-items:center;
+    gap:0.5rem;
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:1.3rem;
+    text-decoration:none;
+    color:var(--ink);
+  }
+  .wordmark .mark{
+    width:34px;height:34px;
+    border-radius:11px;
+    background:linear-gradient(135deg, var(--cat-tile), var(--dog-tile));
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:var(--shadow-soft);
+    flex-shrink:0;
+  }
+  .wordmark .mark svg{width:20px;height:20px;}
+
+  /* ============ BUTTONS ============ */
+  .btn{
+    font-family:var(--font-body);
+    font-weight:800;
+    font-size:0.95rem;
+    border:none;
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:0.55rem;
+    border-radius:999px;
+    padding:13px 26px;
+    transition:transform 180ms ease, box-shadow 180ms ease;
+    white-space:nowrap;
+  }
+  .btn:active{transform:scale(0.97);}
+  .btn-primary{
+    background:linear-gradient(135deg, var(--accent), var(--accent-deep));
+    color:#fff;
+    box-shadow:0 10px 24px -8px color-mix(in srgb, var(--accent-deep) 70%, transparent);
+  }
+  .btn-primary:hover{box-shadow:0 14px 30px -8px color-mix(in srgb, var(--accent-deep) 80%, transparent); transform:translateY(-1px);}
+  .btn-ghost{
+    background:transparent;
+    color:var(--ink);
+    padding:13px 14px;
+    font-weight:700;
+  }
+  .btn-ghost:hover{color:var(--accent-deep);}
+  .btn-sm{padding:9px 18px;font-size:0.85rem;}
+
+  .apple-glyph{width:15px;height:15px;flex-shrink:0;}
+  .btn-store-sub{display:block;font-weight:600;font-size:0.68rem;opacity:0.85;letter-spacing:0.02em;}
+
+  /* ============ HERO ============ */
+  .hero .wrap{
+    display:grid;
+    grid-template-columns:1.05fr 1fr;
+    gap:clamp(32px,5vw,64px);
+    align-items:center;
+  }
+  @media (max-width:840px){
+    .hero .wrap{grid-template-columns:1fr; text-align:left;}
+  }
+  .hero h1{
+    font-size:clamp(2.35rem,4vw + 1.2rem,3.6rem);
+    margin-top:0.5rem;
+  }
+  .hero-sub{
+    margin-top:1.1rem;
+    font-size:1.08rem;
+    color:var(--ink-soft);
+    max-width:46ch;
+  }
+  .hero-cta-row{
+    margin-top:1.9rem;
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:0.75rem 1.4rem;
+  }
+  .hero-note{
+    margin-top:1.4rem;
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    display:flex;
+    align-items:center;
+    gap:0.5rem;
+  }
+  .hero-note svg{width:14px;height:14px;flex-shrink:0;color:var(--mint-ink);}
+
+  /* ---- puzzle board visual ---- */
+  .board-stage{
+    position:relative;
+    display:flex;
+    justify-content:center;
+  }
+  .board{
+    --cell:clamp(34px,7.6vw,52px);
+    --gap:clamp(9px,2vw,15px);
+    background:var(--board-frame);
+    border-radius:26px;
+    padding:clamp(14px,3vw,22px);
+    box-shadow:var(--shadow);
+    display:grid;
+    grid-template-columns:
+      var(--cell) var(--gap) var(--cell) var(--gap) var(--cell)
+      var(--gap) var(--cell) var(--gap) var(--cell) var(--gap) var(--cell);
+    grid-template-rows:
+      var(--cell) var(--gap) var(--cell) var(--gap) var(--cell)
+      var(--gap) var(--cell) var(--gap) var(--cell) var(--gap) var(--cell);
+  }
+  .tile{
+    background:var(--tile-empty);
+    border-radius:9px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .tile.cat{background:var(--cat-tile);color:var(--cat-ink);}
+  .tile.dog{background:var(--dog-tile);color:var(--dog-ink);}
+  .tile svg{width:64%;height:64%;}
+  .conn{
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:calc(var(--gap) * 1.05);
+    color:var(--ink-soft);
+    background:var(--card);
+    border-radius:50%;
+    width:calc(var(--gap) * 1.7);
+    height:calc(var(--gap) * 1.7);
+    margin:auto;
+    box-shadow:0 1px 0 var(--line);
+    position:relative;
+    z-index:2;
+  }
+  .streak-chip{
+    position:absolute;
+    top:-14px; right:6px;
+    background:var(--card);
+    border-radius:999px;
+    padding:9px 16px 9px 12px;
+    box-shadow:var(--shadow-soft);
+    display:flex;align-items:center;gap:0.4rem;
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:0.82rem;
+    transform:rotate(-4deg);
+    animation:float 5s ease-in-out infinite;
+  }
+  .streak-chip svg{width:16px;height:16px;color:var(--accent-deep);flex-shrink:0;}
+  @keyframes float{
+    0%,100%{transform:rotate(-4deg) translateY(0);}
+    50%{transform:rotate(-4deg) translateY(-5px);}
+  }
+
+  /* ============ RULE SECTION ============ */
+  .rule-head{
+    max-width:44ch;
+  }
+  .rule-head h2{font-size:clamp(1.9rem,2.6vw + 1rem,2.5rem);margin-top:0.4rem;}
+  .rule-head p{margin-top:0.9rem;color:var(--ink-soft);font-size:1.02rem;}
+
+  .rule-grid{
+    margin-top:clamp(32px,5vw,52px);
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:clamp(20px,3vw,28px);
+  }
+  @media (max-width:760px){.rule-grid{grid-template-columns:1fr;}}
+  .rule-card{
+    background:var(--card);
+    border-radius:var(--radius);
+    padding:clamp(22px,3vw,28px);
+    box-shadow:var(--shadow-soft);
+    display:flex;flex-direction:column;gap:1rem;
+  }
+  .rule-card h3{font-size:1.08rem;font-weight:600;}
+  .rule-card p{color:var(--ink-soft);font-size:0.92rem;}
+  .mini-strip{
+    display:flex;gap:6px;align-items:center;
+    justify-content:center;
+    padding:14px 4px;
+    background:var(--board-frame);
+    border-radius:14px;
+  }
+  .mini-tile{
+    width:38px;height:38px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--tile-empty);flex-shrink:0;
+  }
+  .mini-tile.cat{background:var(--cat-tile);color:var(--cat-ink);}
+  .mini-tile.dog{background:var(--dog-tile);color:var(--dog-ink);}
+  .mini-tile.bad{background:color-mix(in srgb, var(--danger) 22%, var(--tile-empty));}
+  .mini-tile svg{width:65%;height:65%;}
+  .mini-conn{
+    width:20px;height:20px;border-radius:50%;
+    background:var(--card);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-display);font-weight:600;font-size:0.72rem;
+    color:var(--ink-soft);flex-shrink:0;
+  }
+  .mini-x{
+    width:20px;color:var(--accent-deep);flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .mini-x svg{width:16px;height:16px;}
+  .mini-check{color:var(--mint-ink);flex-shrink:0;display:flex;align-items:center;}
+  .mini-check svg{width:18px;height:18px;}
+
+  .oops-aside{
+    margin-top:clamp(28px,4vw,40px);
+    display:flex;
+    align-items:center;
+    gap:clamp(16px,3vw,26px);
+    background:var(--card);
+    border-radius:var(--radius);
+    padding:clamp(18px,3vw,24px) clamp(20px,3vw,28px);
+    box-shadow:var(--shadow-soft);
+  }
+  .oops-aside img{width:clamp(64px,9vw,88px);height:clamp(64px,9vw,88px);object-fit:contain;flex-shrink:0;}
+  .oops-aside p{color:var(--ink-soft);font-size:0.96rem;}
+  .oops-aside strong{color:var(--ink);}
+  @media (max-width:520px){.oops-aside{flex-direction:column;text-align:center;}}
+
+  /* ============ FEATURES ============ */
+  .feature-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:clamp(28px,5vw,64px);
+    align-items:center;
+    border-radius:32px;
+    padding:clamp(30px,4vw,52px);
+  }
+  .feature-row + .feature-row{margin-top:clamp(20px,3vw,28px);}
+  @media (max-width:820px){
+    .feature-row{grid-template-columns:1fr;}
+    .feature-row.reverse .feature-visual{order:-1;}
+  }
+  .feature-row.reverse{direction:rtl;}
+  .feature-row.reverse > *{direction:ltr;}
+  .feature-copy .eyebrow{margin-bottom:0.6rem;}
+  .feature-copy h3{font-size:clamp(1.5rem,1.8vw + 1rem,2rem);}
+  .feature-copy p{margin-top:0.85rem;color:var(--ink-soft);font-size:1rem;max-width:42ch;}
+
+  .feature-visual{display:flex;justify-content:center;}
+  .visual-card{
+    background:var(--card);
+    border-radius:20px;
+    padding:22px;
+    box-shadow:var(--shadow-soft);
+    width:100%;
+    max-width:320px;
+  }
+
+  /* daily visual: week strip */
+  .day-strip{display:flex;gap:8px;justify-content:space-between;}
+  .day-chip{
+    flex:1;aspect-ratio:1;
+    border-radius:11px;
+    background:var(--tile-empty);
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.72rem;font-weight:800;color:var(--ink-soft);
+  }
+  .day-chip.done{background:var(--sun);color:var(--ink);}
+  .day-chip.today{background:var(--accent);color:#fff;}
+  .streak-line{
+    margin-top:16px;display:flex;align-items:center;gap:0.5rem;
+    font-family:var(--font-display);font-weight:600;font-size:0.95rem;
+  }
+  .streak-line svg{width:18px;height:18px;color:var(--accent-deep);}
+
+  /* stage visual */
+  .stage-steps{display:flex;flex-direction:column;gap:10px;}
+  .stage-step{
+    display:flex;align-items:center;gap:10px;
+    background:var(--tile-empty);
+    border-radius:12px;padding:9px 12px;
+  }
+  .stage-step span{font-weight:700;font-size:0.88rem;}
+  .stage-step small{margin-left:auto;color:var(--ink-soft);font-size:0.76rem;font-weight:700;}
+
+  /* practice visual */
+  .practice-sizes{display:flex;gap:8px;flex-wrap:wrap;}
+  .size-pill{
+    padding:7px 14px;border-radius:999px;
+    background:var(--tile-empty);
+    font-size:0.82rem;font-weight:800;color:var(--ink-soft);
+  }
+  .size-pill.active{background:var(--dog-tile);color:var(--dog-ink);}
+  .practice-tools{margin-top:16px;display:flex;gap:10px;}
+  .tool-chip{
+    display:flex;align-items:center;gap:0.4rem;
+    background:var(--tile-empty);border-radius:11px;
+    padding:8px 12px;font-size:0.8rem;font-weight:700;color:var(--ink-soft);
+  }
+  .tool-chip svg{width:15px;height:15px;}
+
+  /* dashboard visual */
+  .paw-row{display:flex;gap:7px;justify-content:space-between;margin-bottom:16px;}
+  .paw-row svg{width:20px;height:20px;color:var(--line);}
+  .paw-row svg.lit{color:var(--accent-deep);}
+  .bars{display:flex;align-items:flex-end;gap:5px;height:64px;}
+  .bars div{flex:1;background:var(--lilac);border-radius:3px 3px 0 0;}
+  .bars div.peak{background:var(--accent-deep);}
+
+  /* ============ BADGES ============ */
+  .badge-shelf{
+    margin-top:clamp(30px,4vw,44px);
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+    gap:clamp(14px,2vw,20px);
+  }
+  .badge{
+    background:var(--card);
+    border-radius:20px;
+    padding:18px 14px 16px;
+    box-shadow:var(--shadow-soft);
+    text-align:center;
+    transition:transform 200ms ease;
+  }
+  .badge:hover{transform:translateY(-4px) rotate(0deg) !important;}
+  .badge:nth-child(3n+1){transform:rotate(-2deg);}
+  .badge:nth-child(3n+2){transform:rotate(1.5deg);}
+  .badge:nth-child(3n){transform:rotate(-1deg);}
+  .badge-icon{
+    width:52px;height:52px;border-radius:50%;
+    margin:0 auto 10px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .badge-icon svg{width:26px;height:26px;}
+  .badge h4{
+    font-family:var(--font-display);font-weight:600;
+    font-size:0.86rem;margin:0;
+  }
+
+  /* ============ CLOSING ============ */
+  .closing{
+    background:var(--board-frame);
+    border-radius:36px;
+  }
+  .closing-inner{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:clamp(28px,4vw,48px);
+    align-items:center;
+    padding-block:clamp(40px,5vw,60px);
+  }
+  @media (max-width:760px){.closing-inner{grid-template-columns:1fr;text-align:center;}}
+  .closing h2{font-size:clamp(1.7rem,2.4vw + 1rem,2.3rem);}
+  .closing p{margin-top:0.9rem;color:var(--ink-soft);font-size:1rem;max-width:48ch;}
+  .closing-cta{margin-top:1.6rem;}
+  .mascot-duo{display:flex;gap:14px;justify-content:center;}
+  .mascot-duo img{
+    width:clamp(84px,11vw,128px);height:clamp(84px,11vw,128px);
+    object-fit:contain;
+    filter:drop-shadow(0 10px 16px rgba(0,0,0,0.12));
+  }
+
+  /* ============ FOOTER ============ */
+  footer{
+    padding-block:clamp(36px,5vw,56px) calc(clamp(36px,5vw,56px) + env(safe-area-inset-bottom,0px));
+    border-top:1px solid var(--line);
+  }
+  .foot-row{
+    display:flex;justify-content:space-between;align-items:center;
+    flex-wrap:wrap;gap:1.2rem;
+  }
+  .foot-tag{color:var(--ink-soft);font-size:0.88rem;max-width:38ch;}
+  .foot-copy{
+    margin-top:1.6rem;font-size:0.78rem;color:var(--ink-soft);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-cat" viewBox="0 0 24 24"><path fill="currentColor" d="M5.5 8.2 2.6 2.8l6.1 2.9c1-.3 2.1-.5 3.3-.5s2.3.2 3.3.5l6.1-2.9-2.9 5.4c1.3 1.4 2 3.2 2 5.1 0 4.6-4.2 8.3-9.5 8.3S1.5 18.1 1.5 13.5c0-2 .8-3.8 2-5.3Z"/></symbol>
+  <symbol id="i-dog" viewBox="0 0 24 24"><path fill="currentColor" d="M12 4.8c2.6 0 4.9.9 6.5 2.4.9-.9 2.2-1.7 3.5-1.7-.2 1.6-1 3-2.1 3.9.6 1.2.9 2.6.9 4.1 0 4.6-3.9 7.7-8.8 7.7S3.2 18.1 3.2 13.5c0-1.5.3-2.9.9-4.1-1.1-.9-1.9-2.3-2.1-3.9 1.3 0 2.6.8 3.5 1.7C7.1 5.7 9.4 4.8 12 4.8Z"/><ellipse cx="6.3" cy="9.5" rx="2" ry="3.2" fill="currentColor" transform="rotate(-25 6.3 9.5)"/><ellipse cx="17.7" cy="9.5" rx="2" ry="3.2" fill="currentColor" transform="rotate(25 17.7 9.5)"/></symbol>
+  <symbol id="i-flame" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c.6 2.8 2.4 4 4 6 1.8 2.3 2.5 4.3 2.5 6.3A6.5 6.5 0 0 1 12 21a6.5 6.5 0 0 1-6.5-6.7c0-1.6.6-2.9 1.6-4.1.2 1.4 1 2.2 1.9 2.2.2-3 1.4-5.2 3-8.4Z"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.5 14.8 9l7 .6-5.3 4.6 1.6 6.8-6.1-3.7-6.1 3.7 1.6-6.8-5.3-4.6 7-.6Z"/></symbol>
+  <symbol id="i-paw" viewBox="0 0 24 24"><path fill="currentColor" d="M6 13.2c1.8 0 3.4 1.9 3.4 4.1 0 1.7-1 2.7-2.6 2.7-1.9 0-3.8-1.5-3.8-3.8 0-1.7 1.3-3 3-3Zm12 0c1.7 0 3 1.3 3 3 0 2.3-1.9 3.8-3.8 3.8-1.6 0-2.6-1-2.6-2.7 0-2.2 1.6-4.1 3.4-4.1ZM8.7 6.3c1.5 0 2.7 1.6 2.7 3.5S10.2 13 8.7 13 6 11.7 6 9.8s1.2-3.5 2.7-3.5Zm6.6 0c1.5 0 2.7 1.6 2.7 3.5S16.8 13 15.3 13s-2.7-1.3-2.7-3.2 1.2-3.5 2.7-3.5Z"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path fill="currentColor" d="M6 2.5v19M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="6" height="6" rx="1.4" fill="currentColor"/><rect x="15" y="3" width="6" height="6" rx="1.4" fill="currentColor"/><rect x="3" y="15" width="6" height="6" rx="1.4" fill="currentColor"/><rect x="15" y="15" width="6" height="6" rx="1.4" fill="currentColor"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2 14 10 22 12 14 14 12 22 10 14 2 12 10 10Z"/></symbol>
+  <symbol id="i-trophy" viewBox="0 0 24 24"><path fill="currentColor" d="M7 3h10v4a5 5 0 0 1-5 5 5 5 0 0 1-5-5Zm-3 1h3v3a3 3 0 0 1-3-3Zm16 0h-3v3a3 3 0 0 0 3-3ZM10 13.5h4v2.3c1.7.4 3 2 3 3.9v.8H7v-.8c0-1.9 1.3-3.5 3-3.9Z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="m4 12.5 5.5 5.5L20 6.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" d="M5 5l14 14M19 5 5 19"/></symbol>
+  <symbol id="i-hint" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M9 18h6M10 21h4M8 10a4 4 0 1 1 6.6 3c-.7.7-1.1 1.4-1.3 2.3H9.7c-.2-.9-.6-1.6-1.3-2.3A4 4 0 0 1 8 10Z"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M6 9h9a5 5 0 1 1 0 10h-3M6 9l3.5-3.5M6 9l3.5 3.5"/></symbol>
+</svg>
+
+<header class="site">
+  <div class="wrap nav-row">
+    <a class="wordmark" href="#top">
+      <span class="mark"><svg viewBox="0 0 24 24" style="color:var(--ink)"><use href="#i-cat"/></svg></span>
+      Catando
+    </a>
+    <a class="btn btn-primary btn-sm" href="#">Get the app</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <p class="eyebrow">A cozy logic puzzle for iOS</p>
+        <h1>Equal cats.<br>Equal dogs.<br>Total calm.</h1>
+        <p class="hero-sub">Catando is a gentle grid puzzle: place cats and dogs so every row and column
+          balances, no three alike ever sit in a line, and every hint between tiles checks out. Every
+          puzzle is solvable by logic alone — so there's never a reason to guess.</p>
+        <div class="hero-cta-row">
+          <a class="btn btn-primary" href="#">
+            <svg class="apple-glyph" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 1.2c.1 1.1-.3 2.2-1 3-.7.8-1.8 1.5-2.9 1.4-.1-1.1.4-2.2 1-3 .8-.8 2-1.4 2.9-1.4Zm4.2 16.8c-.5 1.2-1.1 2.3-1.9 3.3-1 1.4-2.1 2.7-3.7 2.8-1.5 0-2-.9-3.7-.9s-2.3.9-3.7.9c-1.6.1-2.8-1.5-3.8-2.9C1.7 18.8.8 15.1 2 12.5c.8-1.8 2.4-2.9 4-2.9 1.4 0 2.3 1 3.5 1s2.4-1.1 4-.9c1 0 2.9.4 4.1 2.1-3.4 2-2.8 6.6-.9 8.2Z"/></svg>
+            <span><span style="display:block;line-height:1">Get Catando</span><span class="btn-store-sub">on the App Store</span></span>
+          </a>
+          <a class="btn btn-ghost" href="#rule">See the one rule ↓</a>
+        </div>
+        <p class="hero-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m4 12.5 5.5 5.5L20 6.5"/></svg>
+          No account. No timer. Free to play.
+        </p>
+      </div>
+
+      <div class="board-stage">
+        <div class="streak-chip">
+          <svg viewBox="0 0 24 24"><use href="#i-flame"/></svg>
+          5-day streak
+        </div>
+        <div class="board" role="img" aria-label="A partly-filled Catando puzzle grid showing cats, dogs, and match/differ hints between tiles">
+          <!-- row 0 -->
+          <div class="tile cat" style="grid-column:1;grid-row:1"><svg><use href="#i-cat"/></svg></div>
+          <div class="conn" style="grid-column:2;grid-row:1">×</div>
+          <div class="tile dog" style="grid-column:3;grid-row:1"><svg><use href="#i-dog"/></svg></div>
+          <div style="grid-column:4;grid-row:1"></div>
+          <div class="tile" style="grid-column:5;grid-row:1"></div>
+          <div style="grid-column:6;grid-row:1"></div>
+          <div class="tile dog" style="grid-column:7;grid-row:1"><svg><use href="#i-dog"/></svg></div>
+          <div style="grid-column:8;grid-row:1"></div>
+          <div class="tile cat" style="grid-column:9;grid-row:1"><svg><use href="#i-cat"/></svg></div>
+          <div style="grid-column:10;grid-row:1"></div>
+          <div class="tile" style="grid-column:11;grid-row:1"></div>
+
+          <!-- connectors row 0-1 -->
+          <div class="conn" style="grid-column:3;grid-row:2">×</div>
+          <div class="conn" style="grid-column:9;grid-row:2">×</div>
+
+          <!-- row 1 -->
+          <div class="tile" style="grid-column:1;grid-row:3"></div>
+          <div style="grid-column:2;grid-row:3"></div>
+          <div class="tile cat" style="grid-column:3;grid-row:3"><svg><use href="#i-cat"/></svg></div>
+          <div style="grid-column:4;grid-row:3"></div>
+          <div class="tile dog" style="grid-column:5;grid-row:3"><svg><use href="#i-dog"/></svg></div>
+          <div style="grid-column:6;grid-row:3"></div>
+          <div class="tile" style="grid-column:7;grid-row:3"></div>
+          <div style="grid-column:8;grid-row:3"></div>
+          <div class="tile dog" style="grid-column:9;grid-row:3"><svg><use href="#i-dog"/></svg></div>
+          <div style="grid-column:10;grid-row:3"></div>
+          <div class="tile cat" style="grid-column:11;grid-row:3"><svg><use href="#i-cat"/></svg></div>
+
+          <!-- connectors row 1-2 -->
+          <div class="conn" style="grid-column:1;grid-row:4">=</div>
+
+          <!-- row 2 -->
+          <div class="tile dog" style="grid-column:1;grid-row:5"><svg><use href="#i-dog"/></svg></div>
+          <div style="grid-column:2;grid-row:5"></div>
+          <div class="tile" style="grid-column:3;grid-row:5"></div>
+          <div style="grid-column:4;grid-row:5"></div>
+          <div class="tile cat" style="grid-column:5;grid-row:5"><svg><use href="#i-cat"/></svg></div>
+          <div class="conn" style="grid-column:6;grid-row:5">=</div>
+          <div class="tile cat" style="grid-column:7;grid-row:5"><svg><use href="#i-cat"/></svg></div>
+          <div style="grid-column:8;grid-row:5"></div>
+          <div class="tile" style="grid-column:9;grid-row:5"></div>
+          <div style="grid-column:10;grid-row:5"></div>
+          <div class="tile dog" style="grid-column:11;grid-row:5"><svg><use href="#i-dog"/></svg></div>
+
+          <!-- row 3 -->
+          <div class="tile" style="grid-column:1;grid-row:7"></div>
+          <div style="grid-column:2;grid-row:7"></div>
+          <div class="tile dog" style="grid-column:3;grid-row:7"><svg><use href="#i-dog"/></svg></div>
+          <div style="grid-column:4;grid-row:7"></div>
+          <div class="tile" style="grid-column:5;grid-row:7"></div>
+          <div style="grid-column:6;grid-row:7"></div>
+          <div class="tile dog" style="grid-column:7;grid-row:7"><svg><use href="#i-dog"/></svg></div>
+          <div class="conn" style="grid-column:8;grid-row:7">×</div>
+          <div class="tile cat" style="grid-column:9;grid-row:7"><svg><use href="#i-cat"/></svg></div>
+          <div style="grid-column:10;grid-row:7"></div>
+          <div class="tile" style="grid-column:11;grid-row:7"></div>
+
+          <!-- row 4 -->
+          <div class="tile cat" style="grid-column:1;grid-row:9"><svg><use href="#i-cat"/></svg></div>
+          <div style="grid-column:2;grid-row:9"></div>
+          <div class="tile" style="grid-column:3;grid-row:9"></div>
+          <div style="grid-column:4;grid-row:9"></div>
+          <div class="tile dog" style="grid-column:5;grid-row:9"><svg><use href="#i-dog"/></svg></div>
+          <div style="grid-column:6;grid-row:9"></div>
+          <div class="tile" style="grid-column:7;grid-row:9"></div>
+          <div style="grid-column:8;grid-row:9"></div>
+          <div class="tile" style="grid-column:9;grid-row:9"></div>
+          <div style="grid-column:10;grid-row:9"></div>
+          <div class="tile dog" style="grid-column:11;grid-row:9"><svg><use href="#i-dog"/></svg></div>
+
+          <!-- row 5 -->
+          <div class="tile dog" style="grid-column:1;grid-row:11"><svg><use href="#i-dog"/></svg></div>
+          <div style="grid-column:2;grid-row:11"></div>
+          <div class="tile cat" style="grid-column:3;grid-row:11"><svg><use href="#i-cat"/></svg></div>
+          <div style="grid-column:4;grid-row:11"></div>
+          <div class="tile" style="grid-column:5;grid-row:11"></div>
+          <div style="grid-column:6;grid-row:11"></div>
+          <div class="tile cat" style="grid-column:7;grid-row:11"><svg><use href="#i-cat"/></svg></div>
+          <div style="grid-column:8;grid-row:11"></div>
+          <div class="tile dog" style="grid-column:9;grid-row:11"><svg><use href="#i-dog"/></svg></div>
+          <div style="grid-column:10;grid-row:11"></div>
+          <div class="tile" style="grid-column:11;grid-row:11"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THE ONE RULE ============ -->
+  <section id="rule">
+    <div class="wrap">
+      <div class="rule-head">
+        <p class="eyebrow">The only rule you need</p>
+        <h2>Keep it balanced, keep it varied.</h2>
+        <p>No move counters, no combo bonuses to chase — just three quiet checks that every finished
+          Catando grid satisfies.</p>
+      </div>
+
+      <div class="rule-grid">
+        <div class="rule-card">
+          <div class="mini-strip">
+            <div class="mini-tile cat"><svg><use href="#i-cat"/></svg></div>
+            <div class="mini-tile dog"><svg><use href="#i-dog"/></svg></div>
+            <div class="mini-tile dog"><svg><use href="#i-dog"/></svg></div>
+            <div class="mini-tile cat"><svg><use href="#i-cat"/></svg></div>
+            <div class="mini-check"><svg><use href="#i-check"/></svg></div>
+          </div>
+          <h3>Equal counts</h3>
+          <p>Every row and every column holds exactly the same number of cats and dogs.</p>
+        </div>
+
+        <div class="rule-card">
+          <div class="mini-strip">
+            <div class="mini-tile dog bad"><svg><use href="#i-dog"/></svg></div>
+            <div class="mini-tile dog bad"><svg><use href="#i-dog"/></svg></div>
+            <div class="mini-tile dog bad"><svg><use href="#i-dog"/></svg></div>
+            <div class="mini-x"><svg><use href="#i-x"/></svg></div>
+          </div>
+          <h3>Never three alike</h3>
+          <p>No animal sits three-in-a-row, across or down. Mix it up before you run long.</p>
+        </div>
+
+        <div class="rule-card">
+          <div class="mini-strip">
+            <div class="mini-tile cat"><svg><use href="#i-cat"/></svg></div>
+            <div class="mini-conn">=</div>
+            <div class="mini-tile cat"><svg><use href="#i-cat"/></svg></div>
+            <div class="mini-conn">×</div>
+            <div class="mini-tile dog"><svg><use href="#i-dog"/></svg></div>
+          </div>
+          <h3>Follow the hints</h3>
+          <p><strong style="color:var(--ink)">=</strong> means the pair matches, <strong style="color:var(--ink)">×</strong> means they differ — every hint holds in the finished grid.</p>
+        </div>
+      </div>
+
+      <div class="oops-aside">
+        <img src="images/mascot_cat_oops.png" alt="A grumpy cartoon cat face, unimpressed" width="88" height="88" loading="lazy">
+        <p><strong>That's genuinely it.</strong> No timers, no penalties, no made-up combo score — and
+          because every generated puzzle is solvable by pure logic, you'll never have to place a tile
+          on a coin flip. Sir Whiskers only makes this face when you disturb his nap, not when you're
+          stuck.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURES ============ -->
+  <section aria-label="Features">
+    <div class="wrap">
+      <p class="eyebrow">Four ways to play</p>
+      <h2 style="margin-top:0.4rem;font-size:clamp(1.9rem,2.6vw + 1rem,2.5rem);">Built for a slow morning or a five-minute break.</h2>
+
+      <!-- Daily -->
+      <div class="feature-row" style="background:linear-gradient(135deg, color-mix(in srgb, var(--sun) 65%, transparent), color-mix(in srgb, var(--accent-glow) 32%, transparent));margin-top:clamp(32px,5vw,48px);">
+        <div class="feature-copy">
+          <p class="eyebrow">Daily Puzzle</p>
+          <h3>One grid, every day, for everyone.</h3>
+          <p>A new hand-crafted puzzle unlocks each morning — the same grid for every player, no matter
+            the time zone you solve it in. Keep your streak alive, and if you miss a day, you get one
+            grace day before it resets.</p>
+        </div>
+        <div class="feature-visual">
+          <div class="visual-card">
+            <div class="day-strip">
+              <div class="day-chip done">M</div>
+              <div class="day-chip done">T</div>
+              <div class="day-chip done">W</div>
+              <div class="day-chip done">T</div>
+              <div class="day-chip done">F</div>
+              <div class="day-chip today">S</div>
+              <div class="day-chip">S</div>
+            </div>
+            <div class="streak-line">
+              <svg><use href="#i-flame"/></svg>
+              5-day streak — 1 grace day banked
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage -->
+      <div class="feature-row reverse" style="background:linear-gradient(135deg, color-mix(in srgb, var(--mint) 55%, transparent), color-mix(in srgb, var(--dog-tile) 55%, transparent));">
+        <div class="feature-copy">
+          <p class="eyebrow">Stage Mode</p>
+          <h3>Climb from 4×4 to 10×10.</h3>
+          <p>Stage Mode is an endless run across growing boards. Clear a puzzle, earn Energy, and spend
+            it unlocking bigger grids and milestones as the challenge grows right alongside you.</p>
+        </div>
+        <div class="feature-visual">
+          <div class="visual-card">
+            <div class="stage-steps">
+              <div class="stage-step"><svg style="width:16px;height:16px;color:var(--mint-ink);flex-shrink:0;"><use href="#i-check"/></svg><span>4×4</span><small>cleared</small></div>
+              <div class="stage-step"><svg style="width:16px;height:16px;color:var(--mint-ink);flex-shrink:0;"><use href="#i-check"/></svg><span>6×6</span><small>cleared</small></div>
+              <div class="stage-step" style="background:var(--dog-tile);"><svg style="width:16px;height:16px;color:var(--dog-ink);flex-shrink:0;"><use href="#i-flame"/></svg><span style="color:var(--dog-ink)">8×8</span><small style="color:var(--dog-ink)">in progress</small></div>
+              <div class="stage-step" style="opacity:0.55;"><svg style="width:16px;height:16px;color:var(--ink-soft);flex-shrink:0;"><use href="#i-grid"/></svg><span>10×10</span><small>locked</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Practice -->
+      <div class="feature-row" style="background:linear-gradient(135deg, color-mix(in srgb, var(--dog-tile) 60%, transparent), color-mix(in srgb, var(--card) 70%, transparent));">
+        <div class="feature-copy">
+          <p class="eyebrow">Practice Mode</p>
+          <h3>Any size, your pace.</h3>
+          <p>Pick any board size and settle in. Hints and undo are always within reach, and nothing is
+            timed — Practice is just you, the grid, and as much tea as you need.</p>
+        </div>
+        <div class="feature-visual">
+          <div class="visual-card">
+            <div class="practice-sizes">
+              <span class="size-pill">4×4</span>
+              <span class="size-pill active">6×6</span>
+              <span class="size-pill">8×8</span>
+              <span class="size-pill">10×10</span>
+            </div>
+            <div class="practice-tools">
+              <span class="tool-chip"><svg><use href="#i-hint"/></svg>Hint</span>
+              <span class="tool-chip"><svg><use href="#i-undo"/></svg>Undo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard -->
+      <div class="feature-row reverse" style="background:linear-gradient(135deg, color-mix(in srgb, var(--lilac) 60%, transparent), color-mix(in srgb, var(--accent-deep-glow) 26%, transparent));">
+        <div class="feature-copy">
+          <p class="eyebrow">Progress Dashboard</p>
+          <h3>Watch your streak grow.</h3>
+          <p>A login streak with a 7-day paw row, a 14-day activity chart, your best times per board
+            size, and ten badges waiting to be earned along the way.</p>
+        </div>
+        <div class="feature-visual">
+          <div class="visual-card">
+            <div class="paw-row">
+              <svg class="lit"><use href="#i-paw"/></svg><svg class="lit"><use href="#i-paw"/></svg>
+              <svg class="lit"><use href="#i-paw"/></svg><svg class="lit"><use href="#i-paw"/></svg>
+              <svg class="lit"><use href="#i-paw"/></svg><svg><use href="#i-paw"/></svg><svg><use href="#i-paw"/></svg>
+            </div>
+            <div class="bars">
+              <div style="height:30%"></div><div style="height:55%"></div><div style="height:20%"></div>
+              <div style="height:70%"></div><div style="height:45%"></div><div style="height:85%"></div>
+              <div style="height:60%"></div><div style="height:35%" class="peak"></div><div style="height:90%" class="peak"></div>
+              <div style="height:50%"></div><div style="height:65%"></div><div style="height:25%"></div>
+              <div style="height:75%"></div><div style="height:40%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BADGES ============ -->
+  <section aria-label="Badges">
+    <div class="wrap">
+      <p class="eyebrow">Ten badges to earn</p>
+      <h2 style="margin-top:0.4rem;font-size:clamp(1.9rem,2.6vw + 1rem,2.5rem);">Small wins, worth collecting.</h2>
+      <p class="measure" style="margin-top:0.8rem;color:var(--ink-soft);max-width:52ch;">Nothing to buy, nothing to grind for — just quiet milestones that show up as you play the way you already do.</p>
+
+      <div class="badge-shelf">
+        <div class="badge"><div class="badge-icon" style="background:var(--sun);color:var(--ink);"><svg><use href="#i-star"/></svg></div><h4>First Solve</h4></div>
+        <div class="badge"><div class="badge-icon" style="background:var(--accent-glow);color:var(--accent-deep);"><svg><use href="#i-paw"/></svg></div><h4>3-Day Streak</h4></div>
+        <div class="badge"><div class="badge-icon" style="background:var(--accent-glow);color:var(--accent-deep);"><svg><use href="#i-paw"/></svg></div><h4>7-Day Streak</h4></div>
+        <div class="badge"><div class="badge-icon" style="background:var(--accent-glow);color:var(--accent-deep);"><svg><use href="#i-paw"/></svg></div><h4>30-Day Streak</h4></div>
+        <div class="badge"><div class="badge-icon" style="background:color-mix(in srgb, var(--sun) 80%, var(--accent-glow));color:var(--ink);"><svg><use href="#i-flame"/></svg></div><h4>7 Dailies in a Row</h4></div>
+        <div class="badge"><div class="badge-icon" style="background:var(--lilac);color:#7A6FB0;"><svg><use href="#i-spark"/></svg></div><h4>No Hints Daily</h4></div>
+        <div class="badge"><div class="badge-icon" style="background:var(--mint);color:var(--mint-ink);"><svg><use href="#i-flag"/></svg></div><h4>Beat the Par</h4></div>
+        <div class="badge"><div class="badge-icon" style="background:var(--dog-tile);color:var(--dog-ink);"><svg><use href="#i-grid"/></svg></div><h4>8×8 Cleared</h4></div>
+        <div class="badge"><div class="badge-icon" style="background:var(--dog-tile);color:var(--dog-ink);"><svg><use href="#i-grid"/></svg></div><h4>10×10 Cleared</h4></div>
+        <div class="badge"><div class="badge-icon" style="background:var(--cat-tile);color:var(--cat-ink);"><svg><use href="#i-trophy"/></svg></div><h4>50 Puzzles Solved</h4></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CLOSING ============ -->
+  <section>
+    <div class="wrap">
+      <div class="closing">
+        <div class="wrap closing-inner" style="padding-inline:clamp(22px,4vw,44px);">
+          <div>
+            <p class="eyebrow">Free to play, no catch</p>
+            <h2>Just open it and start placing tiles.</h2>
+            <p>Catando is free, supported by the occasional ad between puzzles. Want a completely quiet
+              board? A one-time Remove Ads purchase turns them off for good. No account, no login, no
+              data to hand over — ever.</p>
+            <div class="closing-cta">
+              <a class="btn btn-primary" href="#">
+                <svg class="apple-glyph" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 1.2c.1 1.1-.3 2.2-1 3-.7.8-1.8 1.5-2.9 1.4-.1-1.1.4-2.2 1-3 .8-.8 2-1.4 2.9-1.4Zm4.2 16.8c-.5 1.2-1.1 2.3-1.9 3.3-1 1.4-2.1 2.7-3.7 2.8-1.5 0-2-.9-3.7-.9s-2.3.9-3.7.9c-1.6.1-2.8-1.5-3.8-2.9C1.7 18.8.8 15.1 2 12.5c.8-1.8 2.4-2.9 4-2.9 1.4 0 2.3 1 3.5 1s2.4-1.1 4-.9c1 0 2.9.4 4.1 2.1-3.4 2-2.8 6.6-.9 8.2Z"/></svg>
+                <span><span style="display:block;line-height:1">Get Catando</span><span class="btn-store-sub">on the App Store</span></span>
+              </a>
+            </div>
+          </div>
+          <div class="mascot-duo">
+            <img src="images/mascot_cat.png" alt="A cheerful cartoon cat mascot" width="128" height="128" loading="lazy">
+            <img src="images/mascot_dog.png" alt="A cheerful cartoon dog mascot" width="128" height="128" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-row">
+      <a class="wordmark" href="#top">
+        <span class="mark"><svg viewBox="0 0 24 24" style="color:var(--ink)"><use href="#i-dog"/></svg></span>
+        Catando
+      </a>
+      <p class="foot-tag">No account needed. No timer. Just cats, dogs, and a little logic — whenever you want a quiet minute.</p>
+      <a class="btn btn-primary btn-sm" href="#">Get the app</a>
+    </div>
+    <div class="foot-copy">
+      <span>Catando — iOS 17+</span>
+      <span>Free to play · ad-supported · one-time Remove Ads available</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
