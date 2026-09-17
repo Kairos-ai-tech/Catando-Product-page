@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script>document.documentElement.classList.add('js')</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Catando — a cozy cat &amp; dog logic puzzle for iOS</title>
@@ -54,7 +55,7 @@
     padding-top:env(safe-area-inset-top,0px);
     padding-bottom:env(safe-area-inset-bottom,0px);
   }
-  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth;}
 
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
@@ -127,8 +128,27 @@
   .measure{max-width:var(--measure);}
 
   @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
     *{animation-duration:0.001ms!important;animation-iteration-count:1!important;transition-duration:0.001ms!important;}
   }
+
+  /* ============ SCROLL REVEAL ============ */
+  .reveal{
+    opacity:0;
+    transform:translateY(22px);
+    transition:opacity 0.7s cubic-bezier(.16,1,.3,1), transform 0.7s cubic-bezier(.16,1,.3,1);
+  }
+  .reveal.is-visible{opacity:1;transform:translateY(0);}
+  .reveal-stagger > *{
+    opacity:0;
+    transform:translateY(22px);
+    transition:opacity 0.6s cubic-bezier(.16,1,.3,1), transform 0.6s cubic-bezier(.16,1,.3,1);
+    transition-delay:calc(var(--i, 0) * 80ms);
+  }
+  .reveal-stagger.is-visible > *{opacity:1;transform:translateY(0);}
+  /* no-JS fallback: without the reveal script, content must render visible outright */
+  html:not(.js) .reveal,
+  html:not(.js) .reveal-stagger > *{opacity:1;transform:none;}
 
   /* ============ LAYOUT PRIMITIVES ============ */
   .wrap{
@@ -165,7 +185,13 @@
     backdrop-filter:blur(14px) saturate(1.3);
     -webkit-backdrop-filter:blur(14px) saturate(1.3);
     background:color-mix(in srgb, var(--bg) 78%, transparent);
-    border-bottom:1px solid color-mix(in srgb, var(--line) 70%, transparent);
+    border-bottom:1px solid transparent;
+    box-shadow:none;
+    transition:box-shadow 300ms ease, border-color 300ms ease;
+  }
+  header.site.is-scrolled{
+    border-bottom-color:color-mix(in srgb, var(--line) 70%, transparent);
+    box-shadow:0 8px 20px -16px rgba(74,63,53,0.25);
   }
   .nav-row{
     display:flex;
@@ -214,11 +240,26 @@
   }
   .btn:active{transform:scale(0.97);}
   .btn-primary{
+    position:relative;
+    overflow:hidden;
     background:linear-gradient(135deg, var(--accent), var(--accent-deep));
     color:#fff;
     box-shadow:0 10px 24px -8px color-mix(in srgb, var(--accent-deep) 70%, transparent);
   }
   .btn-primary:hover{box-shadow:0 14px 30px -8px color-mix(in srgb, var(--accent-deep) 80%, transparent); transform:translateY(-1px);}
+  .btn-hero::after{
+    content:"";
+    position:absolute;
+    top:0; left:-60%;
+    width:35%; height:100%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.55), transparent);
+    transform:skewX(-20deg);
+    animation:btnShine 5s ease-in-out infinite;
+  }
+  @keyframes btnShine{
+    0%,20%{left:-60%;}
+    45%,100%{left:130%;}
+  }
   .btn-ghost{
     background:transparent;
     color:var(--ink);
@@ -281,6 +322,8 @@
     border-radius:26px;
     padding:clamp(14px,3vw,22px);
     box-shadow:var(--shadow);
+    animation:boardIn 0.7s cubic-bezier(.2,.8,.2,1) both;
+    animation-delay:0.1s;
     display:grid;
     grid-template-columns:
       var(--cell) var(--gap) var(--cell) var(--gap) var(--cell)
@@ -296,7 +339,17 @@
   }
   .tile.cat{background:var(--cat-tile);color:var(--cat-ink);}
   .tile.dog{background:var(--dog-tile);color:var(--dog-ink);}
-  .tile img{width:72%;height:72%;object-fit:contain;}
+  .tile img{width:72%;height:72%;object-fit:contain;animation:tilePop 0.45s cubic-bezier(.3,1.5,.4,1) both;}
+  .tile.cat img{animation-delay:0.35s;}
+  .tile.dog img{animation-delay:0.5s;}
+  @keyframes tilePop{
+    0%{opacity:0;transform:scale(0.4);}
+    100%{opacity:1;transform:scale(1);}
+  }
+  @keyframes boardIn{
+    0%{opacity:0;transform:scale(0.94) translateY(10px);}
+    100%{opacity:1;transform:scale(1) translateY(0);}
+  }
   .conn{
     display:flex;align-items:center;justify-content:center;
     font-family:var(--font-display);
@@ -441,7 +494,15 @@
     font-size:0.72rem;font-weight:800;color:var(--ink-soft);
   }
   .day-chip.done{background:var(--sun);color:var(--ink);}
-  .day-chip.today{background:var(--accent);color:#fff;}
+  .day-chip.today{
+    background:var(--accent);color:#fff;
+    position:relative;
+    animation:todayPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes todayPulse{
+    0%,100%{box-shadow:0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent);}
+    50%{box-shadow:0 0 0 6px color-mix(in srgb, var(--accent) 0%, transparent);}
+  }
   .streak-line{
     margin-top:16px;display:flex;align-items:center;gap:0.5rem;
     font-family:var(--font-display);font-weight:600;font-size:0.95rem;
@@ -501,11 +562,20 @@
   .badge:nth-child(3n+1){transform:rotate(-2deg);}
   .badge:nth-child(3n+2){transform:rotate(1.5deg);}
   .badge:nth-child(3n){transform:rotate(-1deg);}
+  /* keep each badge's jaunty tilt through the reveal animation instead of flattening to 0deg */
+  .badge-shelf.reveal-stagger > .badge:nth-child(3n+1){transform:translateY(22px) rotate(-2deg);}
+  .badge-shelf.reveal-stagger > .badge:nth-child(3n+2){transform:translateY(22px) rotate(1.5deg);}
+  .badge-shelf.reveal-stagger > .badge:nth-child(3n){transform:translateY(22px) rotate(-1deg);}
+  .badge-shelf.reveal-stagger.is-visible > .badge:nth-child(3n+1){transform:translateY(0) rotate(-2deg);}
+  .badge-shelf.reveal-stagger.is-visible > .badge:nth-child(3n+2){transform:translateY(0) rotate(1.5deg);}
+  .badge-shelf.reveal-stagger.is-visible > .badge:nth-child(3n){transform:translateY(0) rotate(-1deg);}
   .badge-icon{
     width:52px;height:52px;border-radius:50%;
     margin:0 auto 10px;
     display:flex;align-items:center;justify-content:center;
+    transition:transform 300ms cubic-bezier(.3,1.5,.4,1);
   }
+  .badge:hover .badge-icon{transform:scale(1.12) rotate(-6deg);}
   .badge-icon svg{width:26px;height:26px;}
   .badge h4{
     font-family:var(--font-display);font-weight:600;
@@ -589,7 +659,7 @@
           balances, no three alike ever sit in a line, and every hint between tiles checks out. Every
           puzzle is solvable by logic alone — so there's never a reason to guess.</p>
         <div class="hero-cta-row">
-          <a class="btn btn-primary" href="#">
+          <a class="btn btn-primary btn-hero" href="#">
             <svg class="apple-glyph" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 1.2c.1 1.1-.3 2.2-1 3-.7.8-1.8 1.5-2.9 1.4-.1-1.1.4-2.2 1-3 .8-.8 2-1.4 2.9-1.4Zm4.2 16.8c-.5 1.2-1.1 2.3-1.9 3.3-1 1.4-2.1 2.7-3.7 2.8-1.5 0-2-.9-3.7-.9s-2.3.9-3.7.9c-1.6.1-2.8-1.5-3.8-2.9C1.7 18.8.8 15.1 2 12.5c.8-1.8 2.4-2.9 4-2.9 1.4 0 2.3 1 3.5 1s2.4-1.1 4-.9c1 0 2.9.4 4.1 2.1-3.4 2-2.8 6.6-.9 8.2Z"/></svg>
             <span><span style="display:block;line-height:1">Get Catando</span><span class="btn-store-sub">on the App Store</span></span>
           </a>
@@ -699,14 +769,14 @@
   <!-- ============ THE ONE RULE ============ -->
   <section id="rule">
     <div class="wrap">
-      <div class="rule-head">
+      <div class="rule-head reveal">
         <p class="eyebrow">The only rule you need</p>
         <h2>Keep it balanced, keep it varied.</h2>
         <p>No move counters, no combo bonuses to chase — just three quiet checks that every finished
           Catando grid satisfies.</p>
       </div>
 
-      <div class="rule-grid">
+      <div class="rule-grid reveal-stagger">
         <div class="rule-card">
           <div class="mini-strip">
             <div class="mini-tile cat"><img src="images/grid_cat.png" alt=""></div>
@@ -743,7 +813,7 @@
         </div>
       </div>
 
-      <div class="oops-aside">
+      <div class="oops-aside reveal">
         <img src="images/mascot_cat_oops.png" alt="A grumpy cartoon cat face, unimpressed" width="88" height="88" loading="lazy">
         <p><strong>That's genuinely it.</strong> No timers, no penalties, no made-up combo score — and
           because every generated puzzle is solvable by pure logic, you'll never have to place a tile
@@ -756,11 +826,13 @@
   <!-- ============ FEATURES ============ -->
   <section aria-label="Features">
     <div class="wrap">
-      <p class="eyebrow">Four ways to play</p>
-      <h2 style="margin-top:0.4rem;font-size:clamp(1.9rem,2.6vw + 1rem,2.5rem);">Built for a slow morning or a five-minute break.</h2>
+      <div class="reveal">
+        <p class="eyebrow">Four ways to play</p>
+        <h2 style="margin-top:0.4rem;font-size:clamp(1.9rem,2.6vw + 1rem,2.5rem);">Built for a slow morning or a five-minute break.</h2>
+      </div>
 
       <!-- Daily -->
-      <div class="feature-row" style="background:linear-gradient(135deg, color-mix(in srgb, var(--sun) 65%, transparent), color-mix(in srgb, var(--accent-glow) 32%, transparent));margin-top:clamp(32px,5vw,48px);">
+      <div class="feature-row reveal" style="background:linear-gradient(135deg, color-mix(in srgb, var(--sun) 65%, transparent), color-mix(in srgb, var(--accent-glow) 32%, transparent));margin-top:clamp(32px,5vw,48px);">
         <div class="feature-copy">
           <p class="eyebrow">Daily Puzzle</p>
           <h3>One grid, every day, for everyone.</h3>
@@ -770,7 +842,7 @@
         </div>
         <div class="feature-visual">
           <div class="visual-card">
-            <div class="day-strip">
+            <div class="day-strip reveal-stagger">
               <div class="day-chip done">M</div>
               <div class="day-chip done">T</div>
               <div class="day-chip done">W</div>
@@ -788,7 +860,7 @@
       </div>
 
       <!-- Stage -->
-      <div class="feature-row reverse" style="background:linear-gradient(135deg, color-mix(in srgb, var(--mint) 55%, transparent), color-mix(in srgb, var(--dog-tile) 55%, transparent));">
+      <div class="feature-row reverse reveal" style="background:linear-gradient(135deg, color-mix(in srgb, var(--mint) 55%, transparent), color-mix(in srgb, var(--dog-tile) 55%, transparent));">
         <div class="feature-copy">
           <p class="eyebrow">Stage Mode</p>
           <h3>Climb from 4×4 to 10×10.</h3>
@@ -797,7 +869,7 @@
         </div>
         <div class="feature-visual">
           <div class="visual-card">
-            <div class="stage-steps">
+            <div class="stage-steps reveal-stagger">
               <div class="stage-step"><svg style="width:16px;height:16px;color:var(--mint-ink);flex-shrink:0;"><use href="#i-check"/></svg><span>4×4</span><small>cleared</small></div>
               <div class="stage-step"><svg style="width:16px;height:16px;color:var(--mint-ink);flex-shrink:0;"><use href="#i-check"/></svg><span>6×6</span><small>cleared</small></div>
               <div class="stage-step" style="background:var(--dog-tile);"><svg style="width:16px;height:16px;color:var(--dog-ink);flex-shrink:0;"><use href="#i-flame"/></svg><span style="color:var(--dog-ink)">8×8</span><small style="color:var(--dog-ink)">in progress</small></div>
@@ -808,7 +880,7 @@
       </div>
 
       <!-- Practice -->
-      <div class="feature-row" style="background:linear-gradient(135deg, color-mix(in srgb, var(--dog-tile) 60%, transparent), color-mix(in srgb, var(--card) 70%, transparent));">
+      <div class="feature-row reveal" style="background:linear-gradient(135deg, color-mix(in srgb, var(--dog-tile) 60%, transparent), color-mix(in srgb, var(--card) 70%, transparent));">
         <div class="feature-copy">
           <p class="eyebrow">Practice Mode</p>
           <h3>Any size, your pace.</h3>
@@ -817,7 +889,7 @@
         </div>
         <div class="feature-visual">
           <div class="visual-card">
-            <div class="practice-sizes">
+            <div class="practice-sizes reveal-stagger">
               <span class="size-pill">4×4</span>
               <span class="size-pill active">6×6</span>
               <span class="size-pill">8×8</span>
@@ -832,7 +904,7 @@
       </div>
 
       <!-- Dashboard -->
-      <div class="feature-row reverse" style="background:linear-gradient(135deg, color-mix(in srgb, var(--lilac) 60%, transparent), color-mix(in srgb, var(--accent-deep-glow) 26%, transparent));">
+      <div class="feature-row reverse reveal" style="background:linear-gradient(135deg, color-mix(in srgb, var(--lilac) 60%, transparent), color-mix(in srgb, var(--accent-deep-glow) 26%, transparent));">
         <div class="feature-copy">
           <p class="eyebrow">Progress Dashboard</p>
           <h3>Watch your streak grow.</h3>
@@ -841,12 +913,12 @@
         </div>
         <div class="feature-visual">
           <div class="visual-card">
-            <div class="paw-row">
+            <div class="paw-row reveal-stagger">
               <svg class="lit"><use href="#i-paw"/></svg><svg class="lit"><use href="#i-paw"/></svg>
               <svg class="lit"><use href="#i-paw"/></svg><svg class="lit"><use href="#i-paw"/></svg>
               <svg class="lit"><use href="#i-paw"/></svg><svg><use href="#i-paw"/></svg><svg><use href="#i-paw"/></svg>
             </div>
-            <div class="bars">
+            <div class="bars reveal-stagger">
               <div style="height:30%"></div><div style="height:55%"></div><div style="height:20%"></div>
               <div style="height:70%"></div><div style="height:45%"></div><div style="height:85%"></div>
               <div style="height:60%"></div><div style="height:35%" class="peak"></div><div style="height:90%" class="peak"></div>
@@ -862,11 +934,13 @@
   <!-- ============ BADGES ============ -->
   <section aria-label="Badges">
     <div class="wrap">
-      <p class="eyebrow">Ten badges to earn</p>
-      <h2 style="margin-top:0.4rem;font-size:clamp(1.9rem,2.6vw + 1rem,2.5rem);">Small wins, worth collecting.</h2>
-      <p class="measure" style="margin-top:0.8rem;color:var(--ink-soft);max-width:52ch;">Nothing to buy, nothing to grind for — just quiet milestones that show up as you play the way you already do.</p>
+      <div class="reveal">
+        <p class="eyebrow">Ten badges to earn</p>
+        <h2 style="margin-top:0.4rem;font-size:clamp(1.9rem,2.6vw + 1rem,2.5rem);">Small wins, worth collecting.</h2>
+        <p class="measure" style="margin-top:0.8rem;color:var(--ink-soft);max-width:52ch;">Nothing to buy, nothing to grind for — just quiet milestones that show up as you play the way you already do.</p>
+      </div>
 
-      <div class="badge-shelf">
+      <div class="badge-shelf reveal-stagger">
         <div class="badge"><div class="badge-icon" style="background:var(--sun);color:var(--ink);"><svg><use href="#i-star"/></svg></div><h4>First Solve</h4></div>
         <div class="badge"><div class="badge-icon" style="background:var(--accent-glow);color:var(--accent-deep);"><svg><use href="#i-paw"/></svg></div><h4>3-Day Streak</h4></div>
         <div class="badge"><div class="badge-icon" style="background:var(--accent-glow);color:var(--accent-deep);"><svg><use href="#i-paw"/></svg></div><h4>7-Day Streak</h4></div>
@@ -884,7 +958,7 @@
   <!-- ============ CLOSING ============ -->
   <section>
     <div class="wrap">
-      <div class="closing">
+      <div class="closing reveal">
         <div class="wrap closing-inner" style="padding-inline:clamp(22px,4vw,44px);">
           <div>
             <p class="eyebrow">Free to play, no catch</p>
@@ -926,6 +1000,35 @@
     </div>
   </div>
 </footer>
+
+<script>
+(function(){
+  var header = document.querySelector('header.site');
+  var onScroll = function(){
+    header.classList.toggle('is-scrolled', window.scrollY > 8);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, {passive:true});
+
+  if (!('IntersectionObserver' in window)) return;
+  var groups = document.querySelectorAll('.reveal-stagger');
+  groups.forEach(function(el){
+    Array.prototype.forEach.call(el.children, function(child, i){
+      child.style.setProperty('--i', i);
+    });
+  });
+  var targets = document.querySelectorAll('.reveal, .reveal-stagger');
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting){
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.15, rootMargin:'0px 0px -60px 0px'});
+  targets.forEach(function(el){ io.observe(el); });
+})();
+</script>
 
 </body>
 </html>
