@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sean85120.github.io/Catando-Product-page/sitemap.xml
