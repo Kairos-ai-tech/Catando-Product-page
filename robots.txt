@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sean85120.github.io/Catando-Product-page/sitemap.xml
+Sitemap: https://catando.app.kairosaitech.com/sitemap.xml
