@@ -4,21 +4,34 @@
 <script>document.documentElement.classList.add('js')</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Catando — a cozy cat &amp; dog logic puzzle for iOS</title>
-<meta name="description" content="Catando is a calm, cozy logic puzzle for iOS: balance cats and dogs on a grid, follow the hints, never guess. Daily Puzzle, Stage Mode, Practice, and a progress dashboard with 10 badges. Free to play, no account needed.">
+<title>Catando — Cozy Cat &amp; Dog Logic Puzzle Game for iOS</title>
+<meta name="description" content="Catando is a free, cozy cat &amp; dog logic puzzle for iPhone. Balance cats and dogs on a grid, follow the = and × hints, never guess. Daily Puzzle, Stage Mode, no account.">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="author" content="Kairos AI Tech">
+<meta name="application-name" content="Catando">
+<meta name="apple-mobile-web-app-title" content="Catando">
 <link rel="canonical" href="https://catando.app.kairosaitech.com/">
+<link rel="alternate" hreflang="en" href="https://catando.app.kairosaitech.com/">
+<link rel="alternate" hreflang="x-default" href="https://catando.app.kairosaitech.com/">
+<link rel="alternate" type="text/markdown" title="LLM-readable summary" href="https://catando.app.kairosaitech.com/llms.txt">
 <meta name="theme-color" content="#FFF8F0" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1B1512" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://catando.app.kairosaitech.com/">
 <meta property="og:site_name" content="Catando">
+<meta property="og:locale" content="en_US">
 <meta property="og:title" content="Catando — a cozy cat &amp; dog logic puzzle for iOS">
 <meta property="og:description" content="Balance cats and dogs on a grid, follow the hints, never guess. Daily Puzzle, Stage Mode, Practice, and a progress dashboard with 10 badges. Free to play, no account needed.">
-<meta property="og:image" content="https://catando.app.kairosaitech.com/images/favicon-180.png">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://catando.app.kairosaitech.com/images/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Catando: Equal cats. Equal dogs. Total calm. A 4×4 grid of cat and dog tiles beside the Catando wordmark.">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Catando — a cozy cat &amp; dog logic puzzle for iOS">
 <meta name="twitter:description" content="Balance cats and dogs on a grid, follow the hints, never guess. Free to play, no account needed.">
-<meta name="twitter:image" content="https://catando.app.kairosaitech.com/images/favicon-180.png">
+<meta name="twitter:image" content="https://catando.app.kairosaitech.com/images/og-image.png">
+<meta name="twitter:image:alt" content="Catando: Equal cats. Equal dogs. Total calm. A 4×4 grid of cat and dog tiles beside the Catando wordmark.">
 <link rel="icon" href="images/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="images/favicon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -297,8 +310,8 @@
   }
   .hero h1{
     font-size:clamp(2.35rem,4vw + 1.2rem,3.6rem);
-    margin-top:0.5rem;
   }
+  .hero h1 .eyebrow{line-height:1.4;margin-bottom:0.5rem;}
   .hero-sub{
     margin-top:1.1rem;
     font-size:1.08rem;
@@ -407,6 +420,7 @@
   .rule-head p{margin-top:0.9rem;color:var(--ink-soft);font-size:1.02rem;}
 
   .rule-grid{
+    list-style:none;padding:0;margin-bottom:0;
     margin-top:clamp(22px,3.5vw,36px);
     display:grid;
     grid-template-columns:repeat(3,1fr);
@@ -561,6 +575,7 @@
   .badge-shelf{
     margin-top:clamp(20px,3vw,30px);
     display:grid;
+    list-style:none;padding:0;margin-bottom:0;
     grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
     gap:clamp(14px,2vw,20px);
   }
@@ -591,7 +606,7 @@
   }
   .badge:hover .badge-icon{transform:scale(1.12) rotate(-6deg);}
   .badge-icon svg{width:26px;height:26px;}
-  .badge h4{
+  .badge h3{
     font-family:var(--font-display);font-weight:600;
     font-size:0.86rem;margin:0;
   }
@@ -634,6 +649,24 @@
     display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;
   }
 
+  /* ============ QUICK FACTS ============ */
+  .facts{
+    margin:clamp(22px,3.5vw,36px) 0 0;
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow-soft);
+    padding:clamp(8px,1.5vw,12px) clamp(20px,3vw,28px);
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));
+    column-gap:clamp(20px,3vw,36px);
+  }
+  .facts > div{
+    display:grid;grid-template-columns:8em 1fr;gap:1rem;
+    padding-block:12px;border-bottom:1px solid var(--line);
+  }
+  .facts dt{font-weight:800;font-size:0.8rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent-deep);padding-top:0.15em;}
+  .facts dd{margin:0;font-size:0.95rem;line-height:1.5;}
+
   /* ============ FAQ ============ */
   .faq-list{
     margin-top:clamp(22px,3.5vw,36px);
@@ -654,6 +687,7 @@
     font-family:var(--font-display);font-weight:600;font-size:1.02rem;
   }
   .faq-item summary::-webkit-details-marker{display:none;}
+  .faq-item summary h3{font:inherit;margin:0;}
   .faq-item summary .faq-chevron{
     flex-shrink:0;width:20px;height:20px;color:var(--ink-soft);
     transition:transform 300ms cubic-bezier(.3,1.5,.4,1);
@@ -664,65 +698,245 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "MobileApplication",
-  "name": "Catando",
-  "operatingSystem": "iOS",
-  "applicationCategory": "GameApplication",
-  "description": "Catando is a calm, cozy logic puzzle for iOS: balance cats and dogs on a grid, follow the hints, never guess. Daily Puzzle, Stage Mode, Practice, and a progress dashboard with 10 badges. Free to play, no account needed."
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
+  "@graph": [
     {
-      "@type": "Question",
-      "name": "What is Catando?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Catando is a cozy grid logic puzzle for iOS. Fill each board with cats and dogs so every row and column balances, no three of the same animal sit in a row, and every hint between two tiles checks out. There's one rule to learn, no timer, and no guessing — every puzzle is solvable by logic alone."
+      "@type": "Organization",
+      "@id": "https://catando.app.kairosaitech.com/#org",
+      "name": "Kairos AI Tech",
+      "email": "kairos.ai.tech@gmail.com",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "kairos.ai.tech@gmail.com",
+        "availableLanguage": "en"
       }
     },
     {
-      "@type": "Question",
-      "name": "Do I need an account to play?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No. Catando has no account, no login, and no sign-up — just open the app and start placing tiles. See our Privacy Policy for what limited data our ad and analytics providers collect."
+      "@type": "WebSite",
+      "@id": "https://catando.app.kairosaitech.com/#website",
+      "url": "https://catando.app.kairosaitech.com/",
+      "name": "Catando",
+      "inLanguage": "en",
+      "publisher": {
+        "@id": "https://catando.app.kairosaitech.com/#org"
       }
     },
     {
-      "@type": "Question",
-      "name": "Is Catando free?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Catando is free to play, supported by the occasional ad between puzzles. A one-time Remove Ads purchase is available if you'd like a completely quiet board."
+      "@type": "WebPage",
+      "@id": "https://catando.app.kairosaitech.com/#webpage",
+      "url": "https://catando.app.kairosaitech.com/",
+      "name": "Catando — Cozy Cat & Dog Logic Puzzle Game for iOS",
+      "description": "Catando is a free, cozy cat & dog logic puzzle for iPhone. Balance cats and dogs on a grid, follow the = and × hints, never guess.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://catando.app.kairosaitech.com/#website"
+      },
+      "about": {
+        "@id": "https://catando.app.kairosaitech.com/#app"
+      },
+      "mainEntity": {
+        "@id": "https://catando.app.kairosaitech.com/#app"
+      },
+      "primaryImageOfPage": {
+        "@id": "https://catando.app.kairosaitech.com/#og-image"
+      },
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [
+          ".hero h1",
+          ".hero-sub",
+          "#faq .faq-item"
+        ]
       }
     },
     {
-      "@type": "Question",
-      "name": "What's the Daily Puzzle streak?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "A new hand-crafted puzzle unlocks every day, the same grid for every player. Solve it to keep your streak alive — and if you miss a day, one grace day is banked before the streak resets."
-      }
+      "@type": "ImageObject",
+      "@id": "https://catando.app.kairosaitech.com/#og-image",
+      "url": "https://catando.app.kairosaitech.com/images/og-image.png",
+      "width": 1200,
+      "height": 630,
+      "caption": "Catando: Equal cats. Equal dogs. Total calm."
     },
     {
-      "@type": "Question",
-      "name": "What board sizes can I play?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Stage Mode runs an endless climb from 4×4 up to 10×10, unlocking bigger boards as you clear puzzles and earn Energy. Practice Mode lets you pick any of those sizes directly, at your own pace, with hints and undo available."
-      }
+      "@type": [
+        "MobileApplication",
+        "VideoGame"
+      ],
+      "@id": "https://catando.app.kairosaitech.com/#app",
+      "name": "Catando",
+      "url": "https://catando.app.kairosaitech.com/",
+      "description": "Catando is a calm, cozy logic puzzle for iOS: balance cats and dogs on a grid, follow the hints, never guess. Daily Puzzle, Stage Mode, Practice, and a progress dashboard with 10 badges. Free to play, no account needed.",
+      "operatingSystem": "iOS 17.0 or later",
+      "applicationCategory": "GameApplication",
+      "applicationSubCategory": "Puzzle",
+      "genre": [
+        "Puzzle",
+        "Logic puzzle",
+        "Casual"
+      ],
+      "gamePlatform": "iOS",
+      "playMode": "SinglePlayer",
+      "numberOfPlayers": {
+        "@type": "QuantitativeValue",
+        "value": 1
+      },
+      "inLanguage": "en",
+      "image": {
+        "@id": "https://catando.app.kairosaitech.com/#og-image"
+      },
+      "screenshot": {
+        "@id": "https://catando.app.kairosaitech.com/#og-image"
+      },
+      "author": {
+        "@id": "https://catando.app.kairosaitech.com/#org"
+      },
+      "publisher": {
+        "@id": "https://catando.app.kairosaitech.com/#org"
+      },
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "category": "free",
+        "description": "Free to play, ad-supported. Optional one-time Remove Ads in-app purchase."
+      },
+      "featureList": [
+        "Daily Puzzle: one hand-crafted grid per day, the same for every player, with streaks and a grace day",
+        "Stage Mode: an endless climb from 4×4 to 10×10 boards, unlocked with Energy",
+        "Practice Mode: any board size, untimed, with hints and undo",
+        "Progress Dashboard: login streak, 14-day activity chart, best times per board size",
+        "10 badges to earn",
+        "Every puzzle solvable by logic alone — no guessing",
+        "No account, login, or sign-up"
+      ],
+      "keywords": "logic puzzle, cat puzzle, dog puzzle, cozy game, binary puzzle, Takuzu, Binairo, Tango puzzle, daily puzzle, brain game, iOS puzzle game"
     },
     {
-      "@type": "Question",
-      "name": "Is every puzzle guaranteed to be solvable?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Every generated puzzle is solvable by pure logic, so you'll never have to place a tile on a coin flip."
-      }
+      "@type": "HowTo",
+      "@id": "https://catando.app.kairosaitech.com/#how-to-play",
+      "name": "How to play Catando",
+      "description": "Fill the grid with cats and dogs using three rules. Every puzzle is solvable by logic alone.",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Equal counts",
+          "text": "Every row and every column holds exactly the same number of cats and dogs.",
+          "url": "https://catando.app.kairosaitech.com/#rule"
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Never three alike",
+          "text": "No animal sits three-in-a-row, across or down.",
+          "url": "https://catando.app.kairosaitech.com/#rule"
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Follow the hints",
+          "text": "= means the two tiles match, × means they differ — every hint holds in the finished grid.",
+          "url": "https://catando.app.kairosaitech.com/#rule"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://catando.app.kairosaitech.com/#faq",
+      "isPartOf": {
+        "@id": "https://catando.app.kairosaitech.com/#webpage"
+      },
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Catando?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Catando is a cozy grid logic puzzle for iOS. Fill each board with cats and dogs so every row and column balances, no three of the same animal sit in a row, and every hint between two tiles checks out. There's one rule to learn, no timer, and no guessing — every puzzle is solvable by logic alone."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do you play Catando?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Fill every empty tile with a cat or a dog. Each row and each column must hold the same number of cats and dogs, no animal may appear three times in a row across or down, and the hints between tiles must hold: = means the two tiles match, × means they differ. Use those rules to deduce each tile, one step at a time."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What kind of puzzle is Catando like?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Catando belongs to the same family of binary grid logic puzzles as Takuzu (also known as Binairo or Binero) and LinkedIn's Tango. If you enjoy those, you'll feel at home — instead of 0s and 1s or suns and moons, you balance cats and dogs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need an account to play?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Catando has no account, no login, and no sign-up — just open the app and start placing tiles. See our Privacy Policy for what limited data our ad and analytics providers collect."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Catando free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Catando is free to play, supported by the occasional ad between puzzles. A one-time Remove Ads purchase is available if you'd like a completely quiet board."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What devices does Catando run on?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Catando is an iOS app and requires iOS 17 or later."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is there a timer?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. There's no countdown and no penalty for taking your time. If you like tracking progress, the Progress Dashboard quietly records your best time for each board size."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What's the Daily Puzzle streak?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A new hand-crafted puzzle unlocks every day, the same grid for every player. Solve it to keep your streak alive — and if you miss a day, one grace day is banked before the streak resets."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What board sizes can I play?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Stage Mode runs an endless climb from 4×4 up to 10×10, unlocking bigger boards as you clear puzzles and earn Energy. Practice Mode lets you pick any of those sizes directly, at your own pace, with hints and undo available."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is every puzzle guaranteed to be solvable?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Every generated puzzle is solvable by pure logic, so you'll never have to place a tile on a coin flip."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Who makes Catando?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Catando is made by Kairos AI Tech. For questions or feedback, email kairos.ai.tech@gmail.com."
+          }
+        }
+      ]
     }
   ]
 }
@@ -761,8 +975,7 @@
   <section class="hero">
     <div class="wrap">
       <div class="hero-copy">
-        <p class="eyebrow">A cozy logic puzzle for iOS</p>
-        <h1>Equal cats.<br>Equal dogs.<br>Total calm.</h1>
+        <h1><span class="eyebrow">Catando · a cozy cat &amp; dog logic puzzle for iOS</span>Equal cats.<br>Equal dogs.<br>Total calm.</h1>
         <p class="hero-sub">Catando is a gentle grid puzzle: place cats and dogs so every row and column
           balances, no three alike ever sit in a line, and every hint between tiles checks out. Every
           puzzle is solvable by logic alone — so there's never a reason to guess.</p>
@@ -875,17 +1088,17 @@
   </section>
 
   <!-- ============ THE ONE RULE ============ -->
-  <section id="rule">
+  <section id="rule" aria-labelledby="rule-title">
     <div class="wrap">
       <div class="rule-head reveal">
-        <p class="eyebrow">The only rule you need</p>
-        <h2>Keep it balanced, keep it varied.</h2>
+        <p class="eyebrow">How to play Catando</p>
+        <h2 id="rule-title">Keep it balanced, keep it varied.</h2>
         <p>No move counters, no combo bonuses to chase — just three quiet checks that every finished
           Catando grid satisfies.</p>
       </div>
 
-      <div class="rule-grid reveal-stagger">
-        <div class="rule-card">
+      <ol class="rule-grid reveal-stagger">
+        <li class="rule-card">
           <div class="mini-strip">
             <div class="mini-tile cat"><img src="images/grid_cat.png" alt=""></div>
             <div class="mini-tile dog"><img src="images/grid_dog.png" alt=""></div>
@@ -895,9 +1108,9 @@
           </div>
           <h3>Equal counts</h3>
           <p>Every row and every column holds exactly the same number of cats and dogs.</p>
-        </div>
+        </li>
 
-        <div class="rule-card">
+        <li class="rule-card">
           <div class="mini-strip">
             <div class="mini-tile dog bad"><img src="images/grid_dog.png" alt=""></div>
             <div class="mini-tile dog bad"><img src="images/grid_dog.png" alt=""></div>
@@ -906,9 +1119,9 @@
           </div>
           <h3>Never three alike</h3>
           <p>No animal sits three-in-a-row, across or down. Mix it up before you run long.</p>
-        </div>
+        </li>
 
-        <div class="rule-card">
+        <li class="rule-card">
           <div class="mini-strip">
             <div class="mini-tile cat"><img src="images/grid_cat.png" alt=""></div>
             <div class="mini-conn">=</div>
@@ -918,8 +1131,8 @@
           </div>
           <h3>Follow the hints</h3>
           <p><strong style="color:var(--ink)">=</strong> means the pair matches, <strong style="color:var(--ink)">×</strong> means they differ — every hint holds in the finished grid.</p>
-        </div>
-      </div>
+        </li>
+      </ol>
 
       <div class="oops-aside reveal">
         <img src="images/mascot_cat_oops.png" alt="A grumpy cartoon cat face, unimpressed" width="88" height="88" loading="lazy">
@@ -932,11 +1145,11 @@
   </section>
 
   <!-- ============ FEATURES ============ -->
-  <section aria-label="Features">
+  <section id="features" aria-labelledby="features-title">
     <div class="wrap">
       <div class="reveal">
         <p class="eyebrow">Four ways to play</p>
-        <h2 style="margin-top:0.4rem;font-size:clamp(1.9rem,2.6vw + 1rem,2.5rem);">Built for a slow morning or a five-minute break.</h2>
+        <h2 id="features-title" style="margin-top:0.4rem;font-size:clamp(1.9rem,2.6vw + 1rem,2.5rem);">Built for a slow morning or a five-minute break.</h2>
       </div>
 
       <!-- Daily -->
@@ -1040,72 +1253,119 @@
   </section>
 
   <!-- ============ BADGES ============ -->
-  <section aria-label="Badges">
+  <section id="badges" aria-labelledby="badges-title">
     <div class="wrap">
       <div class="reveal">
         <p class="eyebrow">Ten badges to earn</p>
-        <h2 style="margin-top:0.4rem;font-size:clamp(1.9rem,2.6vw + 1rem,2.5rem);">Small wins, worth collecting.</h2>
+        <h2 id="badges-title" style="margin-top:0.4rem;font-size:clamp(1.9rem,2.6vw + 1rem,2.5rem);">Small wins, worth collecting.</h2>
         <p class="measure" style="margin-top:0.8rem;color:var(--ink-soft);max-width:52ch;">Nothing to buy, nothing to grind for — just quiet milestones that show up as you play the way you already do.</p>
       </div>
 
-      <div class="badge-shelf reveal-stagger">
-        <div class="badge"><div class="badge-icon" style="background:var(--sun);color:var(--ink);"><svg><use href="#i-star"/></svg></div><h4>First Solve</h4></div>
-        <div class="badge"><div class="badge-icon" style="background:var(--accent-glow);color:var(--accent-deep);"><svg><use href="#i-paw"/></svg></div><h4>3-Day Streak</h4></div>
-        <div class="badge"><div class="badge-icon" style="background:var(--accent-glow);color:var(--accent-deep);"><svg><use href="#i-paw"/></svg></div><h4>7-Day Streak</h4></div>
-        <div class="badge"><div class="badge-icon" style="background:var(--accent-glow);color:var(--accent-deep);"><svg><use href="#i-paw"/></svg></div><h4>30-Day Streak</h4></div>
-        <div class="badge"><div class="badge-icon" style="background:color-mix(in srgb, var(--sun) 80%, var(--accent-glow));color:var(--ink);"><svg><use href="#i-flame"/></svg></div><h4>7 Dailies in a Row</h4></div>
-        <div class="badge"><div class="badge-icon" style="background:var(--lilac);color:#7A6FB0;"><svg><use href="#i-spark"/></svg></div><h4>No Hints Daily</h4></div>
-        <div class="badge"><div class="badge-icon" style="background:var(--mint);color:var(--mint-ink);"><svg><use href="#i-flag"/></svg></div><h4>Beat the Par</h4></div>
-        <div class="badge"><div class="badge-icon" style="background:var(--dog-tile);color:var(--dog-ink);"><svg><use href="#i-grid"/></svg></div><h4>8×8 Cleared</h4></div>
-        <div class="badge"><div class="badge-icon" style="background:var(--dog-tile);color:var(--dog-ink);"><svg><use href="#i-grid"/></svg></div><h4>10×10 Cleared</h4></div>
-        <div class="badge"><div class="badge-icon" style="background:var(--cat-tile);color:var(--cat-ink);"><svg><use href="#i-trophy"/></svg></div><h4>50 Puzzles Solved</h4></div>
+      <ul class="badge-shelf reveal-stagger">
+        <li class="badge"><div class="badge-icon" style="background:var(--sun);color:var(--ink);"><svg><use href="#i-star"/></svg></div><h3>First Solve</h3></li>
+        <li class="badge"><div class="badge-icon" style="background:var(--accent-glow);color:var(--accent-deep);"><svg><use href="#i-paw"/></svg></div><h3>3-Day Streak</h3></li>
+        <li class="badge"><div class="badge-icon" style="background:var(--accent-glow);color:var(--accent-deep);"><svg><use href="#i-paw"/></svg></div><h3>7-Day Streak</h3></li>
+        <li class="badge"><div class="badge-icon" style="background:var(--accent-glow);color:var(--accent-deep);"><svg><use href="#i-paw"/></svg></div><h3>30-Day Streak</h3></li>
+        <li class="badge"><div class="badge-icon" style="background:color-mix(in srgb, var(--sun) 80%, var(--accent-glow));color:var(--ink);"><svg><use href="#i-flame"/></svg></div><h3>7 Dailies in a Row</h3></li>
+        <li class="badge"><div class="badge-icon" style="background:var(--lilac);color:#7A6FB0;"><svg><use href="#i-spark"/></svg></div><h3>No Hints Daily</h3></li>
+        <li class="badge"><div class="badge-icon" style="background:var(--mint);color:var(--mint-ink);"><svg><use href="#i-flag"/></svg></div><h3>Beat the Par</h3></li>
+        <li class="badge"><div class="badge-icon" style="background:var(--dog-tile);color:var(--dog-ink);"><svg><use href="#i-grid"/></svg></div><h3>8×8 Cleared</h3></li>
+        <li class="badge"><div class="badge-icon" style="background:var(--dog-tile);color:var(--dog-ink);"><svg><use href="#i-grid"/></svg></div><h3>10×10 Cleared</h3></li>
+        <li class="badge"><div class="badge-icon" style="background:var(--cat-tile);color:var(--cat-ink);"><svg><use href="#i-trophy"/></svg></div><h3>50 Puzzles Solved</h3></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ QUICK FACTS ============ -->
+  <section id="facts" aria-labelledby="facts-title">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="eyebrow">Catando at a glance</p>
+        <h2 id="facts-title" style="margin-top:0.4rem;font-size:clamp(1.9rem,2.6vw + 1rem,2.5rem);">Quick facts.</h2>
       </div>
+      <dl class="facts reveal">
+          <div><dt>Genre</dt><dd>Logic puzzle (binary grid, Takuzu / Tango family)</dd></div>
+          <div><dt>Platform</dt><dd>iOS 17 or later</dd></div>
+          <div><dt>Price</dt><dd>Free to play · ad-supported · one-time Remove Ads purchase</dd></div>
+          <div><dt>Modes</dt><dd>Daily Puzzle, Stage Mode, Practice Mode, Progress Dashboard</dd></div>
+          <div><dt>Board sizes</dt><dd>4×4, 6×6, 8×8, 10×10</dd></div>
+          <div><dt>Account</dt><dd>None — no login, no sign-up</dd></div>
+          <div><dt>Timer</dt><dd>None — play at your own pace</dd></div>
+          <div><dt>Badges</dt><dd>10 to earn</dd></div>
+          <div><dt>Developer</dt><dd>Kairos AI Tech</dd></div>
+      </dl>
     </div>
   </section>
 
   <!-- ============ FAQ ============ -->
-  <section id="faq" aria-label="Frequently asked questions">
+  <section id="faq" aria-labelledby="faq-title">
     <div class="wrap">
       <div class="reveal">
-        <p class="eyebrow">Common questions</p>
-        <h2>Everything else, quickly.</h2>
+        <p class="eyebrow">Frequently asked questions</p>
+        <h2 id="faq-title">Everything else, quickly.</h2>
       </div>
 
       <div class="faq-list reveal">
         <details class="faq-item">
-          <summary>What is Catando?<svg class="faq-chevron"><use href="#i-chevron"/></svg></summary>
-          <p>Catando is a cozy grid logic puzzle for iOS. Fill each board with cats and dogs so every
-            row and column balances, no three of the same animal sit in a row, and every hint between
-            two tiles checks out. There's one rule to learn, no timer, and no guessing — every puzzle
-            is solvable by logic alone.</p>
+          <summary><h3>What is Catando?</h3><svg class="faq-chevron"><use href="#i-chevron"/></svg></summary>
+          <p>Catando is a cozy grid logic puzzle for iOS. Fill each board with cats and dogs so every row and
+            column balances, no three of the same animal sit in a row, and every hint between two tiles
+            checks out. There's one rule to learn, no timer, and no guessing — every puzzle is solvable by
+            logic alone.</p>
         </details>
         <details class="faq-item">
-          <summary>Do I need an account to play?<svg class="faq-chevron"><use href="#i-chevron"/></svg></summary>
-          <p>No. Catando has no account, no login, and no sign-up — just open the app and start
-            placing tiles. See our <a href="privacy/">Privacy Policy</a> for what limited data
-            our ad and analytics providers collect.</p>
+          <summary><h3>How do you play Catando?</h3><svg class="faq-chevron"><use href="#i-chevron"/></svg></summary>
+          <p>Fill every empty tile with a cat or a dog. Each row and each column must hold the same number of
+            cats and dogs, no animal may appear three times in a row across or down, and the hints between
+            tiles must hold: <strong>=</strong> means the two tiles match, <strong>×</strong> means they
+            differ. Use those rules to deduce each tile, one step at a time.</p>
         </details>
         <details class="faq-item">
-          <summary>Is Catando free?<svg class="faq-chevron"><use href="#i-chevron"/></svg></summary>
-          <p>Yes. Catando is free to play, supported by the occasional ad between puzzles. A one-time
-            Remove Ads purchase is available if you'd like a completely quiet board.</p>
+          <summary><h3>What kind of puzzle is Catando like?</h3><svg class="faq-chevron"><use href="#i-chevron"/></svg></summary>
+          <p>Catando belongs to the same family of binary grid logic puzzles as Takuzu (also known as Binairo
+            or Binero) and LinkedIn's Tango. If you enjoy those, you'll feel at home — instead of 0s and 1s
+            or suns and moons, you balance cats and dogs.</p>
         </details>
         <details class="faq-item">
-          <summary>What's the Daily Puzzle streak?<svg class="faq-chevron"><use href="#i-chevron"/></svg></summary>
-          <p>A new hand-crafted puzzle unlocks every day, the same grid for every player. Solve it to
-            keep your streak alive — and if you miss a day, one grace day is banked before the streak
-            resets.</p>
+          <summary><h3>Do I need an account to play?</h3><svg class="faq-chevron"><use href="#i-chevron"/></svg></summary>
+          <p>No. Catando has no account, no login, and no sign-up — just open the app and start placing
+            tiles. See our <a href="privacy/">Privacy Policy</a> for what limited data our ad and analytics
+            providers collect.</p>
         </details>
         <details class="faq-item">
-          <summary>What board sizes can I play?<svg class="faq-chevron"><use href="#i-chevron"/></svg></summary>
+          <summary><h3>Is Catando free?</h3><svg class="faq-chevron"><use href="#i-chevron"/></svg></summary>
+          <p>Yes. Catando is free to play, supported by the occasional ad between puzzles. A one-time Remove
+            Ads purchase is available if you'd like a completely quiet board.</p>
+        </details>
+        <details class="faq-item">
+          <summary><h3>What devices does Catando run on?</h3><svg class="faq-chevron"><use href="#i-chevron"/></svg></summary>
+          <p>Catando is an iOS app and requires iOS 17 or later.</p>
+        </details>
+        <details class="faq-item">
+          <summary><h3>Is there a timer?</h3><svg class="faq-chevron"><use href="#i-chevron"/></svg></summary>
+          <p>No. There's no countdown and no penalty for taking your time. If you like tracking progress, the
+            Progress Dashboard quietly records your best time for each board size.</p>
+        </details>
+        <details class="faq-item">
+          <summary><h3>What's the Daily Puzzle streak?</h3><svg class="faq-chevron"><use href="#i-chevron"/></svg></summary>
+          <p>A new hand-crafted puzzle unlocks every day, the same grid for every player. Solve it to keep
+            your streak alive — and if you miss a day, one grace day is banked before the streak resets.</p>
+        </details>
+        <details class="faq-item">
+          <summary><h3>What board sizes can I play?</h3><svg class="faq-chevron"><use href="#i-chevron"/></svg></summary>
           <p>Stage Mode runs an endless climb from 4×4 up to 10×10, unlocking bigger boards as you clear
-            puzzles and earn Energy. Practice Mode lets you pick any of those sizes directly, at your
-            own pace, with hints and undo available.</p>
+            puzzles and earn Energy. Practice Mode lets you pick any of those sizes directly, at your own
+            pace, with hints and undo available.</p>
         </details>
         <details class="faq-item">
-          <summary>Is every puzzle guaranteed to be solvable?<svg class="faq-chevron"><use href="#i-chevron"/></svg></summary>
-          <p>Yes. Every generated puzzle is solvable by pure logic, so you'll never have to place a tile
-            on a coin flip.</p>
+          <summary><h3>Is every puzzle guaranteed to be solvable?</h3><svg class="faq-chevron"><use href="#i-chevron"/></svg></summary>
+          <p>Yes. Every generated puzzle is solvable by pure logic, so you'll never have to place a tile on a
+            coin flip.</p>
+        </details>
+        <details class="faq-item">
+          <summary><h3>Who makes Catando?</h3><svg class="faq-chevron"><use href="#i-chevron"/></svg></summary>
+          <p>Catando is made by Kairos AI Tech. For questions or feedback, email <a
+            href="mailto:kairos.ai.tech@gmail.com">kairos.ai.tech@gmail.com</a>.</p>
         </details>
       </div>
     </div>
@@ -1151,7 +1411,7 @@
       <a class="btn btn-primary btn-sm" href="#">Get the app</a>
     </div>
     <div class="foot-copy">
-      <span>Catando — iOS 17+</span>
+      <span>Catando — iOS 17+ · © 2026 Kairos AI Tech</span>
       <span>Free to play · ad-supported · one-time Remove Ads available</span>
       <span><a href="terms/">Terms of Use</a> · <a href="privacy/">Privacy Policy</a></span>
     </div>

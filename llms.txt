@@ -1,0 +1,35 @@
+# Catando
+
+> Catando is a free, cozy cat & dog logic puzzle game for iOS (iOS 17 or later), made by Kairos AI Tech. Players fill a grid with cats and dogs so every row and column balances, no three of the same animal sit in a line, and every = / × hint between tiles holds. Every puzzle is solvable by logic alone — no guessing, no timer, no account.
+
+## How to play
+
+1. Equal counts: every row and every column holds the same number of cats and dogs.
+2. Never three alike: no animal appears three times in a row, across or down.
+3. Follow the hints: `=` between two tiles means they match; `×` means they differ.
+
+Catando is in the same family of binary grid logic puzzles as Takuzu (Binairo / Binero) and LinkedIn's Tango.
+
+## Modes and features
+
+- Daily Puzzle: one hand-crafted grid per day, the same for every player. Solving keeps a streak alive; one grace day is banked before a streak resets.
+- Stage Mode: an endless climb across growing boards from 4×4 to 10×10, unlocked by clearing puzzles and earning Energy.
+- Practice Mode: pick any board size (4×4, 6×6, 8×8, 10×10), untimed, with hints and undo.
+- Progress Dashboard: login streak with a 7-day paw row, 14-day activity chart, best times per board size.
+- 10 badges: First Solve, 3-Day Streak, 7-Day Streak, 30-Day Streak, 7 Dailies in a Row, No Hints Daily, Beat the Par, 8×8 Cleared, 10×10 Cleared, 50 Puzzles Solved.
+
+## Key facts
+
+- Platform: iOS 17 or later
+- Price: free to play, ad-supported; optional one-time Remove Ads in-app purchase
+- Account: none required (no login, no sign-up)
+- Players: single-player
+- Language: English
+- Developer: Kairos AI Tech (kairos.ai.tech@gmail.com)
+
+## Links
+
+- [Catando home page](https://catando.app.kairosaitech.com/): product overview, rules, features, FAQ
+- [FAQ](https://catando.app.kairosaitech.com/#faq): common questions about Catando
+- [Privacy Policy](https://catando.app.kairosaitech.com/privacy/): what limited data ad and analytics providers collect
+- [Terms of Use](https://catando.app.kairosaitech.com/terms/)
