@@ -1,6 +1,6 @@
 # Catando
 
-> Catando is a free, cozy cat & dog logic puzzle game for iOS (iOS 17 or later), made by Kairos AI Tech. Players fill a grid with cats and dogs so every row and column balances, no three of the same animal sit in a line, and every = / × hint between tiles holds. Every puzzle is solvable by logic alone — no guessing, no timer, no account.
+> Catando is a free, cozy cat & dog logic puzzle game for iOS (iOS 17 or later), made by Kairos.ai. Players fill a grid with cats and dogs so every row and column balances, no three of the same animal sit in a line, and every = / × hint between tiles holds. Every puzzle is solvable by logic alone — no guessing, no timer, no account.
 
 ## How to play
 
@@ -25,7 +25,7 @@ Catando is in the same family of binary grid logic puzzles as Takuzu (Binairo / 
 - Account: none required (no login, no sign-up)
 - Players: single-player
 - Language: English
-- Developer: Kairos AI Tech (kairos.ai.tech@gmail.com)
+- Developer: Kairos.ai (kairos.ai.tech@gmail.com)
 
 ## Links
 
