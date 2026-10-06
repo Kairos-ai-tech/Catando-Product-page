@@ -666,6 +666,32 @@
   }
   .faq-item[open] summary .faq-chevron{transform:rotate(180deg);}
   .faq-item p{color:var(--ink-soft);font-size:0.95rem;padding-bottom:clamp(14px,2vw,18px);max-width:62ch;}
+
+  /* ============ MOTION LAYER (Lenis + GSAP + react-bits-style effects) ============ */
+  html.lenis, html.lenis body{height:auto;}
+  .lenis.lenis-smooth{scroll-behavior:auto !important;}
+  .lenis.lenis-stopped{overflow:hidden;}
+  .scroll-progress{
+    position:fixed;top:0;left:0;right:0;height:3px;z-index:100;
+    background:linear-gradient(90deg, var(--accent), var(--accent-deep));
+    transform:scaleX(0);transform-origin:0 50%;pointer-events:none;
+  }
+  /* split-text hero lines (react-bits SplitText, vanilla) */
+  .split-line{display:block;overflow:hidden;padding-bottom:0.08em;margin-bottom:-0.08em;}
+  .split-line > span{display:block;will-change:transform;}
+  /* spotlight cards (react-bits SpotlightCard, vanilla) */
+  @media (hover:hover) and (pointer:fine){
+    .spotlight{position:relative;isolation:isolate;}
+    .spotlight::after{
+      content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;
+      background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),
+        color-mix(in srgb, var(--accent-glow) 22%, transparent), transparent 70%);
+      opacity:0;transition:opacity 300ms ease;
+    }
+    .spotlight:hover::after{opacity:1;}
+    /* magnetic button (react-bits Magnet, vanilla): GSAP owns transform, CSS only handles shadow */
+    .magnet{transition:box-shadow 180ms ease;will-change:transform;}
+  }
 </style>
 <script type="application/ld+json">
 {
@@ -818,6 +844,7 @@
   <symbol id="i-chevron" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></symbol>
 </svg>
 
+<div class="scroll-progress" aria-hidden="true"></div>
 <header class="site">
   <div class="wrap nav-row">
     <a class="wordmark" href="#top">
@@ -1260,5 +1287,9 @@
 })();
 </script>
 
+<script src="js/vendor/gsap.min.js" defer></script>
+<script src="js/vendor/ScrollTrigger.min.js" defer></script>
+<script src="js/vendor/lenis.min.js" defer></script>
+<script src="js/motion.js" defer></script>
 </body>
 </html>
