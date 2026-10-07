@@ -6,19 +6,25 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Catando — a cozy cat &amp; dog logic puzzle for iOS</title>
 <meta name="description" content="Catando is a calm, cozy logic puzzle for iOS: balance cats and dogs on a grid, follow the hints, never guess. Daily Puzzle, Stage Mode, Practice, and a progress dashboard with 10 badges. Free to play, no account needed.">
+<meta name="robots" content="max-snippet:-1">
+<meta name="apple-itunes-app" content="app-id=6811043893">
 <link rel="canonical" href="https://catando.app.kairosaitech.com/">
+<link rel="alternate" type="text/plain" href="https://catando.app.kairosaitech.com/llms.txt" title="LLM-readable summary">
 <meta name="theme-color" content="#FFF8F0" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1B1512" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://catando.app.kairosaitech.com/">
 <meta property="og:site_name" content="Catando">
+<meta property="og:locale" content="en_US">
 <meta property="og:title" content="Catando — a cozy cat &amp; dog logic puzzle for iOS">
 <meta property="og:description" content="Balance cats and dogs on a grid, follow the hints, never guess. Daily Puzzle, Stage Mode, Practice, and a progress dashboard with 10 badges. Free to play, no account needed.">
 <meta property="og:image" content="https://catando.app.kairosaitech.com/images/favicon-180.png">
+<meta property="og:image:alt" content="Catando app icon">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Catando — a cozy cat &amp; dog logic puzzle for iOS">
 <meta name="twitter:description" content="Balance cats and dogs on a grid, follow the hints, never guess. Free to play, no account needed.">
 <meta name="twitter:image" content="https://catando.app.kairosaitech.com/images/favicon-180.png">
+<meta name="twitter:image:alt" content="Catando app icon">
 <link rel="icon" href="images/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="images/favicon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -664,11 +670,78 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "MobileApplication",
-  "name": "Catando",
-  "operatingSystem": "iOS",
-  "applicationCategory": "GameApplication",
-  "description": "Catando is a calm, cozy logic puzzle for iOS: balance cats and dogs on a grid, follow the hints, never guess. Daily Puzzle, Stage Mode, Practice, and a progress dashboard with 10 badges. Free to play, no account needed."
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://catando.app.kairosaitech.com/#publisher",
+      "name": "Kairos AI Tech",
+      "url": "https://kairosaitech.com/"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://catando.app.kairosaitech.com/#website",
+      "url": "https://catando.app.kairosaitech.com/",
+      "name": "Catando",
+      "inLanguage": "en",
+      "publisher": { "@id": "https://catando.app.kairosaitech.com/#publisher" }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://catando.app.kairosaitech.com/#webpage",
+      "url": "https://catando.app.kairosaitech.com/",
+      "name": "Catando — a cozy cat & dog logic puzzle for iOS",
+      "isPartOf": { "@id": "https://catando.app.kairosaitech.com/#website" },
+      "about": { "@id": "https://catando.app.kairosaitech.com/#app" },
+      "hasPart": { "@id": "https://catando.app.kairosaitech.com/#howto" },
+      "primaryImageOfPage": "https://catando.app.kairosaitech.com/images/favicon-180.png",
+      "inLanguage": "en"
+    },
+    {
+      "@type": "MobileApplication",
+      "@id": "https://catando.app.kairosaitech.com/#app",
+      "name": "Catando",
+      "alternateName": "Catando: Cat & Dog Logic Puzzle",
+      "url": "https://catando.app.kairosaitech.com/",
+      "image": "https://catando.app.kairosaitech.com/images/favicon-180.png",
+      "operatingSystem": "iOS 17.0 or later",
+      "applicationCategory": "GameApplication",
+      "applicationSubCategory": "Puzzle",
+      "genre": "Logic puzzle",
+      "inLanguage": "en",
+      "downloadUrl": "https://apps.apple.com/us/app/catando/id6811043893",
+      "installUrl": "https://apps.apple.com/us/app/catando/id6811043893",
+      "sameAs": "https://apps.apple.com/us/app/catando/id6811043893",
+      "publisher": { "@id": "https://catando.app.kairosaitech.com/#publisher" },
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "url": "https://apps.apple.com/us/app/catando/id6811043893"
+      },
+      "featureList": [
+        "Daily Puzzle with a streak and one grace day",
+        "Stage Mode climbing from 4x4 to 10x10 boards",
+        "Practice Mode with any board size, hints and undo",
+        "Progress dashboard with 10 badges",
+        "Every puzzle solvable by logic alone, no guessing",
+        "No account, login or sign-up required"
+      ],
+      "description": "Catando is a calm, cozy logic puzzle for iOS: balance cats and dogs on a grid, follow the hints, never guess. Daily Puzzle, Stage Mode, Practice, and a progress dashboard with 10 badges. Free to play, no account needed."
+    },
+    {
+      "@type": "HowTo",
+      "@id": "https://catando.app.kairosaitech.com/#howto",
+      "name": "How to solve a Catando puzzle",
+      "description": "Fill the grid with cats and dogs using three simple checks.",
+      "step": [
+        { "@type": "HowToStep", "position": 1, "name": "Keep equal counts", "text": "Every row and column must hold the same number of cats and dogs." },
+        { "@type": "HowToStep", "position": 2, "name": "Never three alike", "text": "No three of the same animal may sit next to each other in a line." },
+        { "@type": "HowToStep", "position": 3, "name": "Follow the hints", "text": "Every hint between two tiles tells you whether they match or differ, and each must check out." }
+      ]
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -751,7 +824,7 @@
       <span class="mark"><img src="images/mark.jpg" alt="" width="34" height="34"></span>
       Catando
     </a>
-    <a class="btn btn-primary btn-sm" href="#">Get the app</a>
+    <a class="btn btn-primary btn-sm" href="https://apps.apple.com/us/app/catando/id6811043893">Get the app</a>
   </div>
 </header>
 
@@ -767,7 +840,7 @@
           balances, no three alike ever sit in a line, and every hint between tiles checks out. Every
           puzzle is solvable by logic alone — so there's never a reason to guess.</p>
         <div class="hero-cta-row">
-          <a class="btn btn-primary btn-hero" href="#">
+          <a class="btn btn-primary btn-hero" href="https://apps.apple.com/us/app/catando/id6811043893">
             <svg class="apple-glyph" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 1.2c.1 1.1-.3 2.2-1 3-.7.8-1.8 1.5-2.9 1.4-.1-1.1.4-2.2 1-3 .8-.8 2-1.4 2.9-1.4Zm4.2 16.8c-.5 1.2-1.1 2.3-1.9 3.3-1 1.4-2.1 2.7-3.7 2.8-1.5 0-2-.9-3.7-.9s-2.3.9-3.7.9c-1.6.1-2.8-1.5-3.8-2.9C1.7 18.8.8 15.1 2 12.5c.8-1.8 2.4-2.9 4-2.9 1.4 0 2.3 1 3.5 1s2.4-1.1 4-.9c1 0 2.9.4 4.1 2.1-3.4 2-2.8 6.6-.9 8.2Z"/></svg>
             <span><span style="display:block;line-height:1">Get Catando</span><span class="btn-store-sub">on the App Store</span></span>
           </a>
@@ -1123,7 +1196,7 @@
               board? A one-time Remove Ads purchase turns them off for good. No account, no login,
               no sign-up — ever.</p>
             <div class="closing-cta">
-              <a class="btn btn-primary" href="#">
+              <a class="btn btn-primary" href="https://apps.apple.com/us/app/catando/id6811043893">
                 <svg class="apple-glyph" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 1.2c.1 1.1-.3 2.2-1 3-.7.8-1.8 1.5-2.9 1.4-.1-1.1.4-2.2 1-3 .8-.8 2-1.4 2.9-1.4Zm4.2 16.8c-.5 1.2-1.1 2.3-1.9 3.3-1 1.4-2.1 2.7-3.7 2.8-1.5 0-2-.9-3.7-.9s-2.3.9-3.7.9c-1.6.1-2.8-1.5-3.8-2.9C1.7 18.8.8 15.1 2 12.5c.8-1.8 2.4-2.9 4-2.9 1.4 0 2.3 1 3.5 1s2.4-1.1 4-.9c1 0 2.9.4 4.1 2.1-3.4 2-2.8 6.6-.9 8.2Z"/></svg>
                 <span><span style="display:block;line-height:1">Get Catando</span><span class="btn-store-sub">on the App Store</span></span>
               </a>
@@ -1148,7 +1221,7 @@
         Catando
       </a>
       <p class="foot-tag">No account needed. No timer. Just cats, dogs, and a little logic — whenever you want a quiet minute.</p>
-      <a class="btn btn-primary btn-sm" href="#">Get the app</a>
+      <a class="btn btn-primary btn-sm" href="https://apps.apple.com/us/app/catando/id6811043893">Get the app</a>
     </div>
     <div class="foot-copy">
       <span>Catando — iOS 17+</span>

@@ -1,0 +1,17 @@
+# Catando
+
+> Catando is a free, calm logic puzzle for iOS (17 or later). Fill a grid with cats and dogs so every row and column balances, no three alike sit in a line, and every hint between tiles checks out. Every puzzle is solvable by logic alone — no guessing, no timer, no account.
+
+## Key facts
+- Platform: iOS 17 or later
+- Price: free to play, ad-supported; a one-time Remove Ads purchase is available
+- Modes: Daily Puzzle (same grid for everyone, streak with one grace day), Stage Mode (4x4 up to 10x10), Practice (any size, hints and undo)
+- Progress dashboard with 10 badges
+- Account: none required
+- Developer: Kairos AI Tech
+
+## Links
+- [Catando on the App Store](https://apps.apple.com/us/app/catando/id6811043893)
+- [Product page and FAQ](https://catando.app.kairosaitech.com/)
+- [Privacy Policy](https://catando.app.kairosaitech.com/privacy/)
+- [Terms of Use](https://catando.app.kairosaitech.com/terms/)
