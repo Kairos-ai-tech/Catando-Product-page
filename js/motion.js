@@ -47,6 +47,8 @@
     h1.innerHTML = lines.map(function (l) {
       return '<span class="split-line"><span>' + l.trim() + '</span></span>';
     }).join(' ');
+    var splitLines = h1.querySelectorAll('.split-line');
+    splitLines[splitLines.length - 1].classList.add('shimmer-line');
     gsap.from('.split-line > span', { yPercent: 110, duration: 0.9, ease: 'power4.out', stagger: 0.12, delay: 0.1 });
     gsap.from('.hero-sub, .hero-cta-row', { y: 18, opacity: 0, duration: 0.8, ease: 'power3.out', stagger: 0.12, delay: 0.55 });
   }
@@ -80,5 +82,64 @@
       });
       btn.addEventListener('pointerleave', function () { x(0); y(0); });
     });
+  }
+
+  // 3D tilt on the hero board (react-bits TiltedCard-style), fine pointers only
+  var board = document.querySelector('.board');
+  if (board && finePointer) {
+    var rx = gsap.quickTo(board, 'rotationX', { duration: 0.5, ease: 'power3.out' });
+    var ry = gsap.quickTo(board, 'rotationY', { duration: 0.5, ease: 'power3.out' });
+    var stage = document.querySelector('.board-stage');
+    stage.addEventListener('pointermove', function (e) {
+      var r = stage.getBoundingClientRect();
+      ry(((e.clientX - r.left) / r.width - 0.5) * 16);
+      rx(-((e.clientY - r.top) / r.height - 0.5) * 16);
+    });
+    stage.addEventListener('pointerleave', function () { rx(0); ry(0); });
+  }
+
+  // Section headings slide up; feature cards drift at different speeds; badges bounce in
+  $('section h2').forEach(function (h) {
+    if (h.closest('.hero')) return;
+    gsap.from(h, { y: 36, opacity: 0, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: { trigger: h, start: 'top 88%', once: true } });
+  });
+  $('.feature-row').forEach(function (row, i) {
+    gsap.fromTo(row, { y: 40 }, { y: -20, ease: 'none',
+      scrollTrigger: { trigger: row, start: 'top bottom', end: 'bottom top', scrub: 0.6 } });
+  });
+  gsap.from('.badge-shelf .badge', {
+    scale: 0.4, y: 30, opacity: 0, duration: 0.7, ease: 'back.out(2)', stagger: 0.07, clearProps: 'opacity',
+    scrollTrigger: { trigger: '.badge-shelf', start: 'top 85%', once: true }
+  });
+
+  // Vanta fog behind the hero: lazy-loaded after load, desktop pointers only (three.js is ~600 KB)
+  var hero = document.querySelector('.hero');
+  var wide = window.matchMedia('(min-width: 900px)').matches;
+  if (hero && finePointer && wide) {
+    var load = function (src) {
+      return new Promise(function (ok, fail) {
+        var el = document.createElement('script');
+        el.src = src; el.onload = ok; el.onerror = fail; document.head.appendChild(el);
+      });
+    };
+    var startVanta = function () {
+      load('js/vendor/three.min.js').then(function () { return load('js/vendor/vanta.fog.min.js'); }).then(function () {
+        var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var layer = document.createElement('div');
+        layer.className = 'hero-vanta';
+        hero.insertBefore(layer, hero.firstChild);
+        window.VANTA.FOG({
+          el: layer, mouseControls: true, touchControls: false, minHeight: 200, minWidth: 200,
+          highlightColor: dark ? 0x7a3f52 : 0xffb3c1,
+          midtoneColor: dark ? 0x5e3a26 : 0xffd9b0,
+          lowlightColor: dark ? 0x284463 : 0xcfe6ff,
+          baseColor: dark ? 0x1b1512 : 0xfff8f0,
+          blurFactor: 0.7, speed: 1.2, zoom: 1.1
+        });
+        requestAnimationFrame(function () { layer.classList.add('is-on'); });
+      }).catch(function () {});
+    };
+    if ('requestIdleCallback' in window) requestIdleCallback(startVanta, { timeout: 2500 }); else setTimeout(startVanta, 1200);
   }
 })();

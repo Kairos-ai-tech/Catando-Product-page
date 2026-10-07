@@ -692,6 +692,23 @@
     /* magnetic button (react-bits Magnet, vanilla): GSAP owns transform, CSS only handles shadow */
     .magnet{transition:box-shadow 180ms ease;will-change:transform;}
   }
+
+  /* Vanta fog hero backdrop (lazy-loaded by js/motion.js) */
+  .hero{position:relative;isolation:isolate;}
+  .hero-vanta{
+    position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity 1.2s ease;
+    -webkit-mask-image:linear-gradient(to bottom,#000 55%,transparent);mask-image:linear-gradient(to bottom,#000 55%,transparent);
+  }
+  .hero-vanta.is-on{opacity:0.9;}
+  /* shimmering gradient word (react-bits GradientText, vanilla) */
+  .shimmer-line > span{
+    background:linear-gradient(100deg,var(--ink) 0%,var(--accent-deep) 35%,var(--cat-ink) 50%,var(--accent-deep) 65%,var(--ink) 100%);
+    background-size:250% 100%;-webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;animation:shimmer 5s linear infinite;
+  }
+  @keyframes shimmer{to{background-position:-250% 0;}}
+  .board-stage{perspective:900px;}
+  .board{transform-style:preserve-3d;will-change:transform;}
 </style>
 <script type="application/ld+json">
 {
