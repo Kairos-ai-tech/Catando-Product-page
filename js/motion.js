@@ -98,38 +98,53 @@
     stage.addEventListener('pointerleave', function () { rx(0); ry(0); });
   }
 
-  // Section headings slide up; feature cards drift at different speeds; badges bounce in
+  // Section headings slide up; feature cards drift at different speeds
   $('section h2').forEach(function (h) {
     if (h.closest('.hero')) return;
     gsap.from(h, { y: 36, opacity: 0, duration: 0.9, ease: 'power3.out',
       scrollTrigger: { trigger: h, start: 'top 88%', once: true } });
   });
-  $('.feature-row').forEach(function (row, i) {
+  $('.feature-row').forEach(function (row) {
+    row.style.transition = 'opacity 0.7s cubic-bezier(.16,1,.3,1)'; // keep .reveal's transform transition from lagging the scrub
     gsap.fromTo(row, { y: 40 }, { y: -20, ease: 'none',
       scrollTrigger: { trigger: row, start: 'top bottom', end: 'bottom top', scrub: 0.6 } });
   });
-  gsap.from('.badge-shelf .badge', {
-    scale: 0.4, y: 30, opacity: 0, duration: 0.7, ease: 'back.out(2)', stagger: 0.07, clearProps: 'opacity',
-    scrollTrigger: { trigger: '.badge-shelf', start: 'top 85%', once: true }
-  });
 
-  // Vanta fog behind the hero: lazy-loaded after load, desktop pointers only (three.js is ~600 KB)
+  // Vanta fog behind the hero: lazy-loaded after load, desktop pointers only (three.js is ~600 KB).
+  // The effect is destroyed while the hero is off-screen (Vanta has no pause) and rebuilt when it returns,
+  // and is re-evaluated when the viewport width or colour scheme changes.
   var hero = document.querySelector('.hero');
-  var wide = window.matchMedia('(min-width: 900px)').matches;
-  if (hero && finePointer && wide) {
+  var wideMq = window.matchMedia('(min-width: 900px)');
+  var darkMq = window.matchMedia('(prefers-color-scheme: dark)');
+  if (hero && finePointer) {
+    var fog = null, layer = null, heroVisible = true, loading = null;
     var load = function (src) {
       return new Promise(function (ok, fail) {
         var el = document.createElement('script');
         el.src = src; el.onload = ok; el.onerror = fail; document.head.appendChild(el);
       });
     };
-    var startVanta = function () {
-      load('js/vendor/three.min.js').then(function () { return load('js/vendor/vanta.fog.min.js'); }).then(function () {
-        var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        var layer = document.createElement('div');
+    var ensureLibs = function () {
+      if (window.VANTA && window.VANTA.FOG) return Promise.resolve();
+      if (!loading) {
+        loading = load('js/vendor/three.min.js').then(function () { return load('js/vendor/vanta.fog.min.js'); })
+          .catch(function () { loading = null; throw new Error('vanta'); });
+      }
+      return loading;
+    };
+    var stopFog = function () {
+      if (fog) { fog.destroy(); fog = null; }
+      if (layer) { layer.remove(); layer = null; }
+    };
+    var startFog = function () {
+      if (fog || !heroVisible || !wideMq.matches) return;
+      ensureLibs().then(function () {
+        if (fog || !heroVisible || !wideMq.matches) return;
+        var dark = darkMq.matches;
+        layer = document.createElement('div');
         layer.className = 'hero-vanta';
         hero.insertBefore(layer, hero.firstChild);
-        window.VANTA.FOG({
+        fog = window.VANTA.FOG({
           el: layer, mouseControls: true, touchControls: false, minHeight: 200, minWidth: 200,
           highlightColor: dark ? 0x7a3f52 : 0xffb3c1,
           midtoneColor: dark ? 0x5e3a26 : 0xffd9b0,
@@ -137,9 +152,21 @@
           baseColor: dark ? 0x1b1512 : 0xfff8f0,
           blurFactor: 0.7, speed: 1.2, zoom: 1.1
         });
-        requestAnimationFrame(function () { layer.classList.add('is-on'); });
+        var l = layer;
+        requestAnimationFrame(function () { l.classList.add('is-on'); });
       }).catch(function () {});
     };
-    if ('requestIdleCallback' in window) requestIdleCallback(startVanta, { timeout: 2500 }); else setTimeout(startVanta, 1200);
+    var refresh = function () { stopFog(); startFog(); };
+    var begin = function () {
+      new IntersectionObserver(function (entries) {
+        heroVisible = entries[0].isIntersecting;
+        if (heroVisible) startFog(); else stopFog();
+      }).observe(hero);
+      [wideMq, darkMq].forEach(function (mq) {
+        if (mq.addEventListener) mq.addEventListener('change', refresh); else mq.addListener(refresh);
+      });
+      startFog();
+    };
+    if ('requestIdleCallback' in window) requestIdleCallback(begin, { timeout: 2500 }); else setTimeout(begin, 1200);
   }
 })();

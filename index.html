@@ -701,14 +701,18 @@
   }
   .hero-vanta.is-on{opacity:0.9;}
   /* shimmering gradient word (react-bits GradientText, vanilla) */
-  .shimmer-line > span{
-    background:linear-gradient(100deg,var(--ink) 0%,var(--accent-deep) 35%,var(--cat-ink) 50%,var(--accent-deep) 65%,var(--ink) 100%);
-    background-size:250% 100%;-webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;color:transparent;animation:shimmer 5s linear infinite;
+  .shimmer-line > span{color:var(--accent-deep);}
+  @supports ((-webkit-background-clip:text) or (background-clip:text)){
+    .shimmer-line > span{
+      background:linear-gradient(100deg,var(--ink) 0%,var(--accent-deep) 35%,var(--cat-ink) 50%,var(--accent-deep) 65%,var(--ink) 100%);
+      background-size:250% 100%;-webkit-background-clip:text;background-clip:text;
+      -webkit-text-fill-color:transparent;color:transparent;animation:shimmer 5s linear infinite;
+    }
   }
   @keyframes shimmer{to{background-position:-250% 0;}}
   .board-stage{perspective:900px;}
-  .board{transform-style:preserve-3d;will-change:transform;}
+  /* boardIn must not fill forwards, or its transform would override GSAP's inline tilt */
+  .board{transform-style:preserve-3d;will-change:transform;animation-fill-mode:backwards;}
 </style>
 <script type="application/ld+json">
 {
