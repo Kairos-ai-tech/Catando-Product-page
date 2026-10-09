@@ -1,0 +1,13 @@
+{
+  "name": "catando-product-page",
+  "private": true,
+  "description": "Static product page for Catando. Dev-only tooling for CI tests.",
+  "scripts": {
+    "test": "node --test tests/",
+    "test:static": "node --test tests/static.test.mjs",
+    "test:smoke": "node --test tests/smoke.test.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.56.1"
+  }
+}
