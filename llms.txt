@@ -12,6 +12,6 @@
 
 ## Links
 - [Catando on the App Store](https://apps.apple.com/us/app/catando/id6811043893)
-- [Product page and FAQ](https://catando.app.kairosaitech.com/)
-- [Privacy Policy](https://catando.app.kairosaitech.com/privacy/)
-- [Terms of Use](https://catando.app.kairosaitech.com/terms/)
+- [Product page and FAQ](https://catando.kairosaitech.com/)
+- [Privacy Policy](https://catando.kairosaitech.com/privacy/)
+- [Terms of Use](https://catando.kairosaitech.com/terms/)

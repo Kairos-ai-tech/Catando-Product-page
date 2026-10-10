@@ -5,7 +5,7 @@ import { dirname, join } from 'node:path';
 import { read, exists, ROOT } from './helpers.mjs';
 
 const APP_STORE = 'https://apps.apple.com/us/app/catando/id6811043893';
-const SITE = 'https://catando.app.kairosaitech.com/';
+const SITE = 'https://catando.kairosaitech.com/';
 const html = read('index.html');
 
 const jsonLd = () => [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]));
