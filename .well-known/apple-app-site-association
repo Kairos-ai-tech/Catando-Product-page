@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["FNJK8U3UKQ.com.kairosai.catdogpuzzle"],
+        "components": [
+          { "/": "/c" },
+          { "/": "/r" }
+        ]
+      }
+    ]
+  }
+}

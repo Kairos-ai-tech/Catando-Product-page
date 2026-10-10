@@ -93,3 +93,11 @@ test('referenced image files are non-empty', async () => {
   }
   assert.ok(dirname(ROOT));
 });
+
+test('apple-app-site-association is valid JSON for the game app and Jekyll is disabled', () => {
+  const aasa = JSON.parse(read('.well-known/apple-app-site-association'));
+  const detail = aasa.applinks.details[0];
+  assert.deepEqual(detail.appIDs, ['FNJK8U3UKQ.com.kairosai.catdogpuzzle']);
+  assert.deepEqual(detail.components.map((c) => c['/']), ['/c', '/r']);
+  assert.ok(exists('.nojekyll'), '.nojekyll required so GitHub Pages serves .well-known');
+});
