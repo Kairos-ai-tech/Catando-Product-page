@@ -145,7 +145,7 @@
 <main class="wrap">
   <div class="card">
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: September 18, 2026</p>
+    <p class="updated">Last updated: October 18, 2026</p>
 
     <p>Catando ("we," "us") respects your privacy. This Privacy Policy explains what data the
     Catando app for iOS collects, why, and what choices you have. Catando has no account and no
@@ -170,12 +170,12 @@
         <tr>
           <td>Apple App Store</td>
           <td>Process the optional "Remove Ads" purchase</td>
-          <td>Purchase confirmation (handled entirely by Apple)</td>
+          <td>Purchase confirmation (payment is handled entirely by Apple; the product and price may also appear in the analytics data described in Section 3)</td>
         </tr>
         <tr>
-          <td>Crash / analytics tooling</td>
-          <td>Diagnose crashes and understand feature usage</td>
-          <td>Device type, OS version, anonymized usage and crash logs</td>
+          <td>Firebase Analytics (Google)</td>
+          <td>Understand which features are used so we can fix bugs and improve the game</td>
+          <td>Anonymous usage events, standard automatic events (first open, sessions, screen views), in-app purchase details, an anonymous per-installation identifier, device model, OS and app version, approximate region (see Section 3)</td>
         </tr>
       </table>
     </div>
@@ -183,7 +183,33 @@
     please refer to Apple's privacy documentation and, where applicable, your device's ad-tracking
     settings to manage this data.</p>
 
-    <h2>3. How We Use Data</h2>
+    <h2>3. Analytics</h2>
+    <p>Catando uses Firebase Analytics, a service from Google, to count how the app is used. The
+    events we record are anonymous: a puzzle was started or completed (with the board size,
+    difficulty and whether it was the daily or a practice puzzle, plus, when completed, whether a
+    hint was used and a rough time range), a hint was used, the War Board was opened or left, a
+    share button was tapped
+    (and which kind of share), an interstitial or rewarded ad was shown, and a Remove Ads purchase
+    or restore happened (which plan, and whether ads are now removed). The events carry no name,
+    email, account or other personal details, and we do not set a user ID.</p>
+    <p>Firebase Analytics also records its own standard events and technical data automatically:
+    first open, session start, screen views, time in the app, app and operating system updates,
+    and, where the SDK collects them, details of in-app purchases made through Apple (such as the
+    product and price, including Looks, look packs and subscriptions), together with an anonymous identifier for this
+    installation of the app, the device model, the operating system and app version, and an
+    approximate region derived from the network connection. We use the version of Firebase
+    Analytics that does not use your device's advertising identifier (IDFA). This data is not
+    linked to your identity and is not used to track you across other companies' apps and
+    websites. Google processes it on our behalf under its own terms; see
+    <a href="https://firebase.google.com/support/privacy">Google's Firebase privacy information</a>.
+    Analytics data is kept according to our Firebase project's retention settings and Google's
+    policies.</p>
+    <p>Analytics is started together with advertising: it stays off until the consent form (shown
+    in the European Economic Area and the United Kingdom) and the iOS tracking prompt have been
+    answered, whichever answer you give to the tracking prompt, because Firebase Analytics as we
+    use it does not use the advertising identifier. Once you have removed ads, analytics is not
+    started on later launches. See Section 5 for how to withdraw consent.</p>
+    <h2>4. How We Use Data</h2>
     <ul>
       <li>To display ads that keep Catando free.</li>
       <li>To process the optional Remove Ads purchase through Apple.</li>
@@ -192,30 +218,36 @@
     <p>We do not sell your data, and we do not use it for any purpose unrelated to running and
     improving the App.</p>
 
-    <h2>4. Your Choices</h2>
+    <h2>5. Your Choices</h2>
     <ul>
       <li>You can limit ad tracking at any time in your device's Settings (Settings → Privacy &amp;
         Security → Tracking, or your device's ad personalization controls).</li>
       <li>Purchasing Remove Ads stops in-app ad requests going forward.</li>
+      <li>In the European Economic Area and the United Kingdom you can change or withdraw your
+        consent at any time in the app under Settings → Privacy Options. If your choices mean that
+        ads can no longer be requested, analytics is switched off as well and the anonymous
+        analytics identifier for your installation is reset. Elsewhere there is currently no
+        separate in-app switch for analytics; deleting the App stops it, and you can contact us
+        with any question or request.</li>
       <li>Deleting the App removes all locally stored progress from your device.</li>
     </ul>
 
-    <h2>5. Children's Privacy</h2>
+    <h2>6. Children's Privacy</h2>
     <p>Catando is suitable for a general audience and contains no gambling, betting, or real-money
     wagering mechanics of any kind. We do not knowingly collect personal information from children.
     If you believe a child has provided us with personal information, contact us and we'll address
     it.</p>
 
-    <h2>6. Data Retention & Security</h2>
+    <h2>7. Data Retention & Security</h2>
     <p>Because Catando doesn't operate user accounts, most of your data (puzzle progress, settings)
     never leaves your device. Any technical data shared with the third-party services listed above
     is retained according to those providers' own policies.</p>
 
-    <h2>7. Changes to This Policy</h2>
+    <h2>8. Changes to This Policy</h2>
     <p>We may update this Privacy Policy from time to time. If we make material changes, we'll
     update the "Last updated" date above.</p>
 
-    <h2>8. Contact</h2>
+    <h2>9. Contact</h2>
     <p>Questions about this Privacy Policy? Reach us at
       <a href="mailto:kairos.ai.tech@gmail.com">kairos.ai.tech@gmail.com</a>.</p>
   </div>
