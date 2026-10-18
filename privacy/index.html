@@ -149,9 +149,9 @@
 
     <p>Catando ("we," "us") respects your privacy. This Privacy Policy explains what data the
     Catando app for iOS collects, why, and what choices you have. Catando has no account and no
-    login of its own — we never ask for your email or any personal profile to play the game. If you
-    join a team on the War Board, the app creates an anonymous identifier for you (see Section 4);
-    it is not linked to your name or email.</p>
+    login of its own — we never ask for your email or any personal profile to play the game. The
+    app takes part in the War Board automatically, which uses an anonymous identifier that is not
+    linked to your name or email (see Section 4).</p>
 
     <h2>1. Information We Don't Collect</h2>
     <p>Catando does not require registration, does not collect your name or contact details, and
@@ -179,6 +179,11 @@
           <td>Firebase (Google)</td>
           <td>Run the War Board: team totals, country standings and the player leaderboard</td>
           <td>Anonymous identifier, team, country or area, daily Energy contributions, avatar, optional display name (see Section 4)</td>
+        </tr>
+        <tr>
+          <td>Email service provider</td>
+          <td>Deliver player-report emails to our support mailbox</td>
+          <td>Reported player's identifier, handle and the reason you give (see Section 4)</td>
         </tr>
         <tr>
           <td>Apple iCloud (CloudKit public database)</td>
@@ -223,33 +228,43 @@
     use it does not use the advertising identifier. Once you have removed ads, analytics is not
     started on later launches. See Section 8 for how to withdraw consent.</p>
     <h2>4. War Board and Teams</h2>
-    <p>When you choose a team (Cats or Dogs), your Energy counts toward your team's global total
-    and toward your country or area on the War Board. To make that work, the app signs you in to
-    Firebase (Google) <em>anonymously</em>. This creates a random identifier; it is not tied to
-    your name, email or Apple ID, and Catando does not offer another way to sign in.</p>
+    <p>The War Board is on by default; the app shows a one-time notice about it and there is no
+    separate on/off switch. Each time you open the app it contacts Firebase (Google) to check the
+    War Board configuration. When you choose a team (Cats or Dogs), or open the board, the app
+    signs you in to Firebase <em>anonymously</em>, and your Energy then counts toward your team's
+    global total and your country or area. The anonymous sign-in creates a random identifier; it is
+    not tied to your name, email or Apple ID, and Catando does not offer another way to sign in.
+    Because the app talks to Google's servers, Google receives technical data such as your IP
+    address and a Firebase installation identifier.</p>
     <p>What the War Board stores for you:</p>
     <ul>
       <li>your anonymous identifier and a generated player handle;</li>
       <li>your team and your country or area, taken from your device's region unless you choose
         another in the app;</li>
-      <li>the Energy you add each day, your weekly total, and your rank;</li>
+      <li>the Energy you add each day and your weekly total (your rank is calculated from these);</li>
       <li>the avatar you pick;</li>
       <li>a display name, <strong>only</strong> if you turn on "Show my name on the board" in
         Profile and the name passes our automatic name filter. Until then no name leaves your
-        device, and other players see only your handle and avatar. If you turn the setting off or
+        device. If you turn the setting off or
         the name is rejected or hidden, it is not shown. Pick a name that does not identify you; it
         is visible to other players.</li>
     </ul>
+    <p>Other players who view the board can see each listed player's handle, avatar, country or
+    area, and weekly Energy, and your name too if you have turned it on.</p>
     <p>If you report another player, we store your report (the reported player's identifier and
     name as shown, your reason, and your own anonymous identifier) for up to 90 days so that we can
-    review it. Reports may be forwarded to us by email.</p>
+    review it. Each report is also sent to our support mailbox by email through a third-party email
+    service, including the reported player's identifier, handle and your reason. Those emails are
+    kept in the mailbox and with that service, and Settings → Reset all progress cannot remove
+    them; contact us (Section 12) if you want them deleted.</p>
     <p>Requests from the app are checked with Firebase App Check (Apple App Attest or DeviceCheck)
-    so that only the genuine app can write to the board. This sends Apple-issued attestation
-    tokens to Firebase; it does not include your name or contact details.</p>
+    so that only the genuine app can use the board. This involves Apple-issued attestation tokens
+    sent to Firebase; it does not include your name or contact details.</p>
     <p>War Board data is kept only as long as needed: daily and weekly player records expire after
     14 and 60 days respectively, your profile expires after 120 days without activity, country totals are kept
     for up to 400 days, and an anonymous War Board account that has been inactive for 120 days is
-    deleted automatically.</p>
+    deleted automatically. Country totals are anonymous sums and are not removed when you delete
+    your data.</p>
 
     <h2>5. iCloud (CloudKit)</h2>
     <p>Some team and ranking features use the public database of Catando's iCloud container
@@ -258,10 +273,12 @@
     daily solve times, and, if you use a recruit link, the link's token and the day it was
     redeemed. Apple CloudKit also attaches an opaque record-creator identifier from your iCloud
     account, which we cannot use to learn your name or email. These records are used only to
-    compute totals and percentile rankings; rankings look at records updated in the last 30 days.
+    compute totals and percentile rankings; rankings look only at records updated in the last 30 days,
+    but the records themselves have no expiry and are kept until removed.
     Catando does not use your private iCloud storage.</p>
     <p>The app has no in-app control to delete these CloudKit records yet. Resetting your progress
-    clears the identifier on your device, so that new activity is not linked to the old records.
+    gives the app a new random identifier, but Apple's record-creator identifier for your iCloud
+    account stays the same, so earlier and later records can still be linked to each other.
     Because these records carry no name or email, we may not be able to tell which records are
     yours; if you want us to try to remove them, contact us (Section 12).</p>
 
@@ -298,8 +315,9 @@
         with any question or request.</li>
       <li>Delete your War Board data: in the app, go to Settings → Reset all progress. This clears
         your progress on the device and also deletes your War Board data and anonymous account on
-        our servers (it is retried automatically if you are offline). You can also email us (Section
-        12) to ask for deletion.</li>
+        our servers (it is retried automatically if you are offline), except for the report emails
+        and country totals described in Section 4. You can also email us (Section 12) to ask for
+        deletion.</li>
       <li>Hide your name: switch off "Show my name on the board" in Profile at any time.</li>
       <li>Subscriptions: cancel in your device's Settings → your name → Subscriptions. Deleting the
         App does not cancel a subscription.</li>
