@@ -156,8 +156,9 @@
     <h2>1. Information We Don't Collect</h2>
     <p>Catando does not require registration, does not collect your name or contact details, and
     does not store your puzzle progress on any server we control — your progress, settings and
-    badges are saved locally on your device. The only game data that leaves your device is the
-    team and ranking activity described in Sections 4 and 5.</p>
+    badges are saved locally on your device. Apart from the optional display name (Section 4),
+    the only game data that leaves your device is the anonymous analytics events (Section 3) and
+    the team and ranking activity described in Sections 4 and 5.</p>
 
     <h2>2. Information Collected Automatically</h2>
     <p>Like most apps, Catando relies on a small number of third-party services that may collect
@@ -254,7 +255,8 @@
     <p>If you report another player, we store your report (the reported player's identifier and
     name as shown, your reason, and your own anonymous identifier) for up to 90 days so that we can
     review it. Each report is also sent to our support mailbox by email through a third-party email
-    service, including the reported player's identifier, handle and your reason. Those emails are
+    service, including the reported player's identifier, handle and your reason (one of a few fixed categories such as offensive name or impersonation).
+    Those emails are
     kept in the mailbox and with that service, and Settings → Reset all progress cannot remove
     them; contact us (Section 12) if you want them deleted.</p>
     <p>Requests from the app are checked with Firebase App Check (Apple App Attest or DeviceCheck)
@@ -267,20 +269,28 @@
     your data.</p>
 
     <h2>5. iCloud (CloudKit)</h2>
-    <p>Some team and ranking features use the public database of Catando's iCloud container
-    (Apple CloudKit). The records are anonymous: a random identifier for this installation of the
+    <p>Catando's team and ranking features use the public database of its iCloud container (Apple
+    CloudKit). This happens automatically: each time you open the app, if you are signed in to
+    iCloud, it uploads a ranking record with your stage reached under a random identifier, whether
+    or not you have chosen a team, and there is no in-app switch for it. Other records (your
+    team's daily Energy, daily solve times, recruit-link redemptions) are uploaded when you earn
+    Energy for your team, solve a daily puzzle where that feature is on, or redeem a recruit link.
+    The records are anonymous: a random identifier for this installation of the
     app (not your Apple ID), your stage reached, your team and the amount of Energy for a day,
     daily solve times, and, if you use a recruit link, the link's token and the day it was
     redeemed. Apple CloudKit also attaches an opaque record-creator identifier from your iCloud
-    account, which we cannot use to learn your name or email. These records are used only to
-    compute totals and percentile rankings; rankings look only at records updated in the last 30 days,
-    but the records themselves have no expiry and are kept until removed.
-    Catando does not use your private iCloud storage.</p>
+    account, which we cannot use to learn your name or email. These records are used to
+    compute team totals and percentile rankings and to credit recruit links. The app reads other
+    players' records from the same public database for this purpose, so records, including the
+    random identifier, the creator identifier and the values above, can be read by the app on
+    other devices. Rankings look only at records updated in the last 30 days, but the records
+    themselves have no expiry and are kept until removed. Catando does not use your private iCloud storage.</p>
     <p>The app has no in-app control to delete these CloudKit records yet. Resetting your progress
     gives the app a new random identifier, but Apple's record-creator identifier for your iCloud
     account stays the same, so earlier and later records can still be linked to each other.
     Because these records carry no name or email, we may not be able to tell which records are
-    yours; if you want us to try to remove them, contact us (Section 12).</p>
+    yours; if you want us to try to remove them, contact us (Section 12). Signing out of iCloud on your
+    device stops new uploads from it.</p>
 
     <h2>6. Purchases</h2>
     <p>Catando offers optional purchases through Apple's App Store: Remove Ads (one-time), Remove
@@ -316,7 +326,8 @@
       <li>Delete your War Board data: in the app, go to Settings → Reset all progress. This clears
         your progress on the device and also deletes your War Board data and anonymous account on
         our servers (it is retried automatically if you are offline), except for the report emails
-        and country totals described in Section 4. You can also email us (Section 12) to ask for
+        and country totals described in Section 4. The app then takes part in the War Board again
+        automatically with a new anonymous identifier. You can also email us (Section 12) to ask for
         deletion.</li>
       <li>Hide your name: switch off "Show my name on the board" in Profile at any time.</li>
       <li>Subscriptions: cancel in your device's Settings → your name → Subscriptions. Deleting the
@@ -337,7 +348,8 @@
     <p>Because Catando doesn't operate user accounts, most of your data (puzzle progress, settings)
     never leaves your device. War Board data is retained as described in Section 4. Any technical
     data shared with the third-party services listed above is retained according to those
-    providers' own policies.</p>
+    providers' own policies, except for the CloudKit records (Section 5) and the report emails
+    (Section 4), which we keep until removed.</p>
 
     <h2>11. Changes to This Policy</h2>
     <p>We may update this Privacy Policy from time to time. If we make material changes, we'll
