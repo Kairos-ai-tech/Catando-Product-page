@@ -145,16 +145,19 @@
 <main class="wrap">
   <div class="card">
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: October 18, 2026</p>
+    <p class="updated">Last updated: October 19, 2026</p>
 
     <p>Catando ("we," "us") respects your privacy. This Privacy Policy explains what data the
     Catando app for iOS collects, why, and what choices you have. Catando has no account and no
-    login — we never ask for your name, email, or any personal profile to play the game.</p>
+    login of its own — we never ask for your email or any personal profile to play the game. If you
+    join a team on the War Board, the app creates an anonymous identifier for you (see Section 4);
+    it is not linked to your name or email.</p>
 
     <h2>1. Information We Don't Collect</h2>
     <p>Catando does not require registration, does not collect your name or contact details, and
-    does not store your puzzle progress on any server we control — your progress and badges are
-    saved locally on your device.</p>
+    does not store your puzzle progress on any server we control — your progress, settings and
+    badges are saved locally on your device. The only game data that leaves your device is the
+    team and ranking activity described in Sections 4 and 5.</p>
 
     <h2>2. Information Collected Automatically</h2>
     <p>Like most apps, Catando relies on a small number of third-party services that may collect
@@ -169,8 +172,18 @@
         </tr>
         <tr>
           <td>Apple App Store</td>
-          <td>Process the optional "Remove Ads" purchase</td>
-          <td>Purchase confirmation (payment is handled entirely by Apple; the product and price may also appear in the analytics data described in Section 3)</td>
+          <td>Process optional purchases: Remove Ads, Remove Ads (Monthly), Catando Plus and Looks (art skins)</td>
+          <td>Purchase confirmation and subscription status (payment is handled entirely by Apple; the product and price may also appear in the analytics data described in Section 3)</td>
+        </tr>
+        <tr>
+          <td>Firebase (Google)</td>
+          <td>Run the War Board: team totals, country standings and the player leaderboard</td>
+          <td>Anonymous identifier, team, country or area, daily Energy contributions, avatar, optional display name (see Section 4)</td>
+        </tr>
+        <tr>
+          <td>Apple iCloud (CloudKit public database)</td>
+          <td>Team totals and rankings</td>
+          <td>Random per-installation identifier, stage reached, team, daily Energy, solve times, recruit-link redemptions (see Section 5)</td>
         </tr>
         <tr>
           <td>Firebase Analytics (Google)</td>
@@ -208,17 +221,71 @@
     in the European Economic Area and the United Kingdom) and the iOS tracking prompt have been
     answered, whichever answer you give to the tracking prompt, because Firebase Analytics as we
     use it does not use the advertising identifier. Once you have removed ads, analytics is not
-    started on later launches. See Section 5 for how to withdraw consent.</p>
-    <h2>4. How We Use Data</h2>
+    started on later launches. See Section 8 for how to withdraw consent.</p>
+    <h2>4. War Board and Teams</h2>
+    <p>When you choose a team (Cats or Dogs), your Energy counts toward your team's global total
+    and toward your country or area on the War Board. To make that work, the app signs you in to
+    Firebase (Google) <em>anonymously</em>. This creates a random identifier; it is not tied to
+    your name, email or Apple ID, and Catando does not offer another way to sign in.</p>
+    <p>What the War Board stores for you:</p>
+    <ul>
+      <li>your anonymous identifier and a generated player handle;</li>
+      <li>your team and your country or area, taken from your device's region unless you choose
+        another in the app;</li>
+      <li>the Energy you add each day, your weekly total, and your rank;</li>
+      <li>the avatar you pick;</li>
+      <li>a display name, <strong>only</strong> if you turn on "Show my name on the board" in
+        Profile and the name passes our automatic name filter. Until then no name leaves your
+        device, and other players see only your handle and avatar. If you turn the setting off or
+        the name is rejected or hidden, it is not shown. Pick a name that does not identify you; it
+        is visible to other players.</li>
+    </ul>
+    <p>If you report another player, we store your report (the reported player's identifier and
+    name as shown, your reason, and your own anonymous identifier) for up to 90 days so that we can
+    review it. Reports may be forwarded to us by email.</p>
+    <p>Requests from the app are checked with Firebase App Check (Apple App Attest or DeviceCheck)
+    so that only the genuine app can write to the board. This sends Apple-issued attestation
+    tokens to Firebase; it does not include your name or contact details.</p>
+    <p>War Board data is kept only as long as needed: daily and weekly player records expire after
+    14 and 60 days respectively, your profile expires after 120 days without activity, country totals are kept
+    for up to 400 days, and an anonymous War Board account that has been inactive for 120 days is
+    deleted automatically.</p>
+
+    <h2>5. iCloud (CloudKit)</h2>
+    <p>Some team and ranking features use the public database of Catando's iCloud container
+    (Apple CloudKit). The records are anonymous: a random identifier for this installation of the
+    app (not your Apple ID), your stage reached, your team and the amount of Energy for a day,
+    daily solve times, and, if you use a recruit link, the link's token and the day it was
+    redeemed. Apple CloudKit also attaches an opaque record-creator identifier from your iCloud
+    account, which we cannot use to learn your name or email. These records are used only to
+    compute totals and percentile rankings; rankings look at records updated in the last 30 days.
+    Catando does not use your private iCloud storage.</p>
+    <p>The app has no in-app control to delete these CloudKit records yet. Resetting your progress
+    clears the identifier on your device, so that new activity is not linked to the old records.
+    Because these records carry no name or email, we may not be able to tell which records are
+    yours; if you want us to try to remove them, contact us (Section 12).</p>
+
+    <h2>6. Purchases</h2>
+    <p>Catando offers optional purchases through Apple's App Store: Remove Ads (one-time), Remove
+    Ads (Monthly, an auto-renewing subscription), Catando Plus (an auto-renewing subscription that
+    removes ads and unlocks every Look), and individual or pack Looks (art skins). Apple processes
+    the payment and manages subscriptions, renewals and refunds; we never see your card or Apple
+    ID details. The app checks your purchases with Apple (StoreKit) to unlock what you bought and
+    stores which Looks you own on your device. Use "Restore Purchases" in the app to recover them
+    on a new device. You can manage or cancel a subscription in your device's Settings → your name
+    → Subscriptions.</p>
+
+    <h2>7. How We Use Data</h2>
     <ul>
       <li>To display ads that keep Catando free.</li>
-      <li>To process the optional Remove Ads purchase through Apple.</li>
+      <li>To process optional purchases and subscriptions through Apple, and to unlock what you bought.</li>
+      <li>To run the War Board and team rankings, and to review reports of misuse.</li>
       <li>To fix bugs and understand which features people actually use.</li>
     </ul>
     <p>We do not sell your data, and we do not use it for any purpose unrelated to running and
     improving the App.</p>
 
-    <h2>5. Your Choices</h2>
+    <h2>8. Your Choices</h2>
     <ul>
       <li>You can limit ad tracking at any time in your device's Settings (Settings → Privacy &amp;
         Security → Tracking, or your device's ad personalization controls).</li>
@@ -229,25 +296,36 @@
         analytics identifier for your installation is reset. Elsewhere there is currently no
         separate in-app switch for analytics; deleting the App stops it, and you can contact us
         with any question or request.</li>
-      <li>Deleting the App removes all locally stored progress from your device.</li>
+      <li>Delete your War Board data: in the app, go to Settings → Reset all progress. This clears
+        your progress on the device and also deletes your War Board data and anonymous account on
+        our servers (it is retried automatically if you are offline). You can also email us (Section
+        12) to ask for deletion.</li>
+      <li>Hide your name: switch off "Show my name on the board" in Profile at any time.</li>
+      <li>Subscriptions: cancel in your device's Settings → your name → Subscriptions. Deleting the
+        App does not cancel a subscription.</li>
+      <li>Deleting the App removes all locally stored progress from your device, but it does not by
+        itself delete data already sent to the War Board or iCloud; use one of the options above.</li>
     </ul>
 
-    <h2>6. Children's Privacy</h2>
+    <h2>9. Children's Privacy</h2>
     <p>Catando is suitable for a general audience and contains no gambling, betting, or real-money
-    wagering mechanics of any kind. We do not knowingly collect personal information from children.
-    If you believe a child has provided us with personal information, contact us and we'll address
+    wagering mechanics of any kind. We do not knowingly collect personal information from children,
+    and Catando has no chat: the only text one player can show another is the
+    optional display name, which is filtered and hidden until the player turns it on. Catando is
+    not directed to children under 13, and we do not run an age check. If you believe a child has provided us with personal information, contact us and we'll address
     it.</p>
 
-    <h2>7. Data Retention & Security</h2>
+    <h2>10. Data Retention &amp; Security</h2>
     <p>Because Catando doesn't operate user accounts, most of your data (puzzle progress, settings)
-    never leaves your device. Any technical data shared with the third-party services listed above
-    is retained according to those providers' own policies.</p>
+    never leaves your device. War Board data is retained as described in Section 4. Any technical
+    data shared with the third-party services listed above is retained according to those
+    providers' own policies.</p>
 
-    <h2>8. Changes to This Policy</h2>
+    <h2>11. Changes to This Policy</h2>
     <p>We may update this Privacy Policy from time to time. If we make material changes, we'll
     update the "Last updated" date above.</p>
 
-    <h2>9. Contact</h2>
+    <h2>12. Contact</h2>
     <p>Questions about this Privacy Policy? Reach us at
       <a href="mailto:kairos.ai.tech@gmail.com">kairos.ai.tech@gmail.com</a>.</p>
   </div>
